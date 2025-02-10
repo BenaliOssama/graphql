@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Profile</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>My School Profile</h1>
+        <button id="logoutBtn">Logout</button>
+    </header>
+    
+    <div class="profile-container">
+        <section class="user-info">
+            <h2>Basic Information</h2>
+            <div id="basicInfo"></div>
+        </section>
+
+        <section class="stats">
+            <div class="stat-box">
+                <h3>Total XP</h3>
+                <p id="totalXp">0</p>
+            </div>
+            <div class="stat-box">
+                <h3>Audit Ratio</h3>
+                <p id="auditRatio">0</p>
+            </div>
+        </section>
+
+        <section class="graphs">
+            <div class="graph-container" id="xpOverTime"></div>
+            <div class="graph-container" id="projectsXp"></div>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="graphs.js"></script>
+</body>
+</html>
