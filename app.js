@@ -15,7 +15,7 @@ if (window.location.pathname.endsWith('index.html') || window.location.pathname 
             
             if (!response.ok) throw new Error('Login failed');
             
-            const { jwt } = await response.json();
+            const  jwt  = await response.json();
             localStorage.setItem('jwt', jwt);
             window.location.href = 'profile.html';
         } catch (error) {
