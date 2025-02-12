@@ -1,3 +1,5 @@
+import {queries} from "./queries.js"
+
 // Login Page Logic
 if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
@@ -50,105 +52,41 @@ if (window.location.pathname.endsWith('profile.html')) {
 
     // Example query for user data
     async function loadProfile() {
-        userQuery = `{
-                user{
-                    login
-                    firstName
-                    lastName
-                    attrs
-                    auditRatio
-                    campus
-                    totalDown
-                    totalUp
-                }
-            }`;
-
-        //                    xps(where: {originEventId: {_in: [41, 23]}}) {
-        // xpQuery=  `{
-        //         user {
-        //             amount
-        //             xps(where: {originEventId: {_eq: 41}}) {
-        //             }
-        //         }
-        //     }`;
- GET_TRANSACTIONS = `
-query GetTransactions($name: String!) {
-  event(where: {object: {name: {_eq: $name}}}){
-    object{
-      events{
-            startAt
-            endAt
-            }
-        }
-    }
-  transaction(
-    where: {
-      _and: [
-        { type: { _eq: "xp" } }, 
-        { event: { object: { name: { _eq: $name } } } },
-      ]
-    },
-    order_by: {createdAt: asc}
-  ) {
-    amount
-    object {
-      name
-    }
-    createdAt
-  }
-}`
-
-        levelQuery = `{
-            transaction_aggregate(
-                where: {
-                type: { _eq: "level" }
-                    event: { object: { name: { _eq: "Module" } } }
-            }
-            order_by: { createdAt: desc }){aggregate {max { amount } } }
-        } `;
-
-
-        skillsQuery = `{
-            transaction(
-                where: { type: { _like: "skill%" } }
-                    order_by: { amount: desc })
-            {
-                type
-                amount
-            }
-        } `;
-
-
-        const [userRes, xpRes, levelRes, skillsRes] = await Promise.all([
-            fetchGraphQL(userQuery),
-            fetchGraphQL(xpQuery),
-            fetchGraphQL(levelQuery),
-            fetchGraphQL(skillsQuery)
+        const [userRes, totalXpRes, individualXpRes, currentLevelRes, skillRes, auditRes, lastProjectsRes] = await Promise.all([
+            fetchGraphQL(queries.userQuery),
+            fetchGraphQL(queries.totalXpQuery),
+            fetchGraphQL(queries.individualXpQuery),
+            fetchGraphQL(queries.currentLevelQuery),
+            fetchGraphQL(queries.skillQuery),
+            fetchGraphQL(queries.auditQuery),
+            fetchGraphQL(queries.lastProjectsQuery)
         ]);
 
         console.log(userRes.data);
-        console.log(xpRes.data);
-        console.log(levelRes.data);
-        console.log(skillsRes.data);
-        //console.log(calculateTotalXP(xpRes.data))
-        displayUserInfo(userRes.data.user[0]);
-        //processXpData(xpRes.data.transaction);
+        console.log(totalXpRes.data);
+        console.log(individualXpRes.data);
+        console.log(currentLevelRes);
+        console.log(skillRes);
+        console.log(auditRes);
+        console.log(lastProjectsRes);
+        displayUserInfo(userRes.data.user[0])
+        processXpData(totalXpRes.data)
     }
 
     function displayUserInfo(user) {
         document.getElementById('basicInfo').innerHTML = `
-            < div id = "basic info" >
+            <div id="basic info" >
                 <p>${user.firstName} ${user.lastName}</p>
                 <p>Campus: ${user.campus}</p>
                 <p>Email: ${user.attrs.email}</p>
                 <p>City: ${user.attrs.city}</p>
-            </div >
+            </div>
             <div id="audit_ratio">
                 <p>auditRatio ${user.auditRatio}</p>
                 <p>totalUp ${user.totalUp}</p>
                 <p>totoalDown ${user.totalDown}</p>
-                <div>
-                    `;
+            <div>
+        `;
     }
 
     function processXpData(transactions) {
@@ -161,27 +99,4 @@ query GetTransactions($name: String!) {
     }
 
     window.onload = loadProfile;
-}
-function calculateTotalXP(data) {
-    if (!data) {
-        console.log('no data')
-    }
-    console.log(data.user)
-    if (!data.user) {
-        console.log('no data.user')
-    }
-    if (!Array.isArray(data.user)) {
-        console.log('no array')
-    }
-    // Check if 'data' contains user and xps array
-    if (data && data.user && Array.isArray(data.user)) {
-        // Assuming we are dealing with the first user in the array
-        const user = data.user[0];
-
-        if (user && Array.isArray(user.xps)) {
-            // Calculate the sum of 'amount' for each XP entry
-            return user.xps.reduce((total, xp) => total + xp.amount, 0);
-        }
-    }
-    return 0; // Return 0 if the data structure doesn't match
 }
