@@ -73,7 +73,7 @@ export class SpiderWebChart {
             text.setAttribute("text-anchor", "middle");
             text.setAttribute("fill", "black");
             //text.setAttribute("font-size", "30");
-            text.innerHTML = this.data[i].label;
+            text.innerHTML = this.data[i].label.split('_')[1];
             this.svg.appendChild(text);
         }
     }
