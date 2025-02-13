@@ -13,6 +13,7 @@ export class SpiderWebChart {
         this.radius = Math.min(this.options.width, this.options.height) / 2;
         this.angleSlice = (Math.PI * 2) / this.data.length ;
     }
+
     draw() {
         this.clearContainer();
         this.createSVG();

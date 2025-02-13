@@ -22,8 +22,21 @@ export function createProjectsXpChart(transactions) {
     document.getElementById('projectsXp').appendChild(svg);
 }
 
-export function createSpiderWebSkillsChart(data) {
-    // Create an instance of the SpiderWebChart
+export function createSpiderWebSkillsChart(unfilteredData) {
+    // filter data removing dublicates and choosing the top skill
+    // order data from largest to smallest
+    let data = filterSkillsData(unfilteredData)
+    // const data = [
+    //     { label: 'Comfort', value: 100 },
+    //     { label: 'Reliability', value: 80 },
+    //     { label: 'Speed', value: 60 },
+    //     { label: 'Safety', value: 40 },
+    //     { label: 'Environment', value: 20 },
+    //     { label: 'Efficiency', value: 5 },
+    //     { label: 'test', value: 11 },
+    // ];
+
+    // Create an instance of the SpiderWebChart , configuration of it
     const spiderWebChart = new SpiderWebChart('chart-container', data, {
         width: 400,
         height: 400,
@@ -32,4 +45,22 @@ export function createSpiderWebSkillsChart(data) {
     });
 
     spiderWebChart.draw();
+}
+
+function filterSkillsData(rawData){
+    let res = {};
+    // skill --> object { type = "string", amount = "int" }
+    for (let skill of rawData){
+        if (!res[skill.type] || res[skill.type].amount < skill.amount) {
+            res[skill.type] = skill.amount ; 
+        }
+    }
+    let result = [];
+    let last  = 0 ; 
+    for (let [key,value] of Object.entries(res)){
+       result.push({label : key, value: value})
+    }
+    result.sort((a,b)=> b.value- a.value)
+    result = result.slice(0,6)
+    return result
 }

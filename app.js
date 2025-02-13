@@ -66,11 +66,12 @@ if (window.location.pathname.endsWith('profile.html')) {
         console.log(totalXpRes.data);
         console.log(individualXpRes.data);
         console.log(currentLevelRes);
-        console.log("current intrest",skillRes.data.transaction);
+        console.log(skillRes.data.transaction);
         console.log(auditRes);
         console.log(lastProjectsRes);
         displayUserInfo(userRes.data.user[0])
         processXpData(totalXpRes.data)
+        createSpiderWebSkillsChart(skillRes.data.transaction);
     }
 
     function displayUserInfo(user) {
@@ -89,23 +90,11 @@ if (window.location.pathname.endsWith('profile.html')) {
         `;
     }
 
-    // Example data
-    const data = [
-        { label: 'Comfort', value: 100 },
-        { label: 'Reliability', value: 80 },
-        { label: 'Speed', value: 60 },
-        { label: 'Safety', value: 40 },
-        { label: 'Environment', value: 20 },
-        { label: 'Efficiency', value: 5 },
-        { label: 'test', value: 11 },
-    ];
-
+    //console.log('it is defined', skillRes.data.transaction)
     function processXpData(transactions) {
         // Process data for graphs
         createXpOverTimeChart(transactions);
         createProjectsXpChart(transactions);
-        createSpiderWebSkillsChart(data);
-        // Draw the chart
     }
 
     window.onload = loadProfile;
