@@ -99,3 +99,4 @@ if (window.location.pathname.endsWith('profile.html')) {
 
     window.onload = loadProfile;
 }
+
