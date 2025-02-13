@@ -1,4 +1,6 @@
-function createXpOverTimeChart(transactions) {
+import { SpiderWebChart } from "./spiderweb.js";
+
+export function createXpOverTimeChart(transactions) {
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('width', '600');
     svg.setAttribute('height', '400');
@@ -9,7 +11,7 @@ function createXpOverTimeChart(transactions) {
     document.getElementById('xpOverTime').appendChild(svg);
 }
 
-function createProjectsXpChart(transactions) {
+export function createProjectsXpChart(transactions) {
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('width', '600');
     svg.setAttribute('height', '400');
@@ -18,4 +20,16 @@ function createProjectsXpChart(transactions) {
     // (Calculate bar positions, create rect elements, labels, etc.)
     
     document.getElementById('projectsXp').appendChild(svg);
+}
+
+export function createSpiderWebSkillsChart(data) {
+    // Create an instance of the SpiderWebChart
+    const spiderWebChart = new SpiderWebChart('chart-container', data, {
+        width: 400,
+        height: 400,
+        levels: 10,
+        maxValue: 100
+    });
+
+    spiderWebChart.draw();
 }
