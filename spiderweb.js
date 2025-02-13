@@ -1,16 +1,17 @@
 export class SpiderWebChart {
-    constructor(containerId, data, options = {}) {
+    constructor(containerId, data, options = {}, radius) {
         this.container = document.getElementById(containerId);
         this.data = data;
+        this.outerCircle = 25,
         this.options = {
-            width: 400,
-            height: 400,
+            width: 500,
+            height: 500,
             levels: 5,
             maxValue: 10,
             ...options
         };
         this.svg = null;
-        this.radius = Math.min(this.options.width, this.options.height) / 2;
+        this.radius = options.radius || Math.min(this.options.width, this.options.height) / 2;
         this.angleSlice = (Math.PI * 2) / this.data.length ;
     }
 
@@ -54,6 +55,9 @@ export class SpiderWebChart {
             const x = centerX + Math.cos(Math.PI / 2 - angle) * this.radius;
             const y = centerY + Math.sin(Math.PI / 2 - angle) * this.radius;
 
+            const xt = centerX + Math.cos(Math.PI / 2 - angle) * (this.radius + this.outerCircle) ;
+            const yt = centerY + Math.sin(Math.PI / 2 - angle) * (this.radius + this.outerCircle) ;
+
             const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
             line.setAttribute("x1", centerX);
             line.setAttribute("y1", centerY);
@@ -61,6 +65,16 @@ export class SpiderWebChart {
             line.setAttribute("y2", y);
             line.setAttribute("stroke", "#ccc");
             this.svg.appendChild(line);
+
+            const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            text.setAttribute("x", xt  );
+            text.setAttribute("y", yt  );
+            //text-anchor="middle" fill="red" font-size="30"
+            text.setAttribute("text-anchor", "middle");
+            text.setAttribute("fill", "black");
+            //text.setAttribute("font-size", "30");
+            text.innerHTML = this.data[i].label;
+            this.svg.appendChild(text);
         }
     }
 
