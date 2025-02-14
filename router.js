@@ -7,6 +7,7 @@ export class Router {
         console.log('Router initialized');
 
         // Bind events
+
         window.addEventListener('popstate', this.handlePopstate.bind(this));
         window.addEventListener('load', this.handleInitialLoad.bind(this));
     }
@@ -21,12 +22,13 @@ export class Router {
         if (!authentication.isAuthenticated()) {
             if (route != "/login") {
                 this.navigate("/login")
-
+                return
             }
         } else {
             console.log('this is not working')
             if (route == "/login") {
                 this.navigate("/")
+                return
             }
         }
 
@@ -61,16 +63,23 @@ export class Router {
         this.render(route);
     }
 
-    handlePopstate() {
+    handlePopstate(event) {
+        event.preventDefault();
         console.log('Popstate triggered');
         const currentRoute = window.location.pathname;
         this.render(currentRoute);
     }
 
-    handleInitialLoad() {
+    handleInitialLoad(event) {
+        event.preventDefault();
         if (window.location.href != "/login") {
             if (!authentication.isAuthenticated()) {
                 this.navigate('/login')
+                return
+            }
+        } else {
+            if (authentication.isAuthenticated) {
+                this.navigate('/')
                 return
             }
         }

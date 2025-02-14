@@ -42,8 +42,7 @@ export class ProfilePage {
         if (!jwt) window.location.href = '/login';
 
         document.getElementById('logoutBtn').addEventListener('click', () => {
-            localStorage.removeItem('jwt');
-            window.location.href = '/';
+            window.location.href = '/logout';
         });
 
         // Fetch user data
