@@ -1,3 +1,7 @@
+import { queries } from "./queries.js"
+import { createProjectsXpChart, createSpiderWebSkillsChart, createXpOverTimeChart } from "./graphs.js"
+
+
 export class ProfilePage {
     render() {
         return `
@@ -102,7 +106,9 @@ export class ProfilePage {
             createProjectsXpChart(transactions);
         }
 
-        window.onload = loadProfile;
+        // window.onload = loadProfile;
+        loadProfile();
+        console.log('done with logic of routing page')
     }
 
     unmount() {

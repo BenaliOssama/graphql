@@ -18,12 +18,18 @@ export class Router {
 
     render(route) {
         console.log(`befor Attempting to render: ${route}. check if the user is loggedin ? `);
-        if (window.location.pathname != "/login") {
-            if (!authentication.isAuthenticated()) {
-                this.navigate('/login', true)
-                return
+        if (!authentication.isAuthenticated()) {
+            if (route != "/login") {
+                this.navigate("/login")
+
+            }
+        } else {
+            console.log('this is not working')
+            if (route == "/login") {
+                this.navigate("/")
             }
         }
+
         console.log(`Attempting to render: ${route}`);
         const app = document.getElementById('app');
 
@@ -50,9 +56,8 @@ export class Router {
         }
     }
 
-    navigate(route, replace = false) {
-        console.log(`Navigating to: ${route}`, replace ? '(replace)' : '');
-        window.history[replace ? 'replaceState' : 'pushState']({}, '', route);
+    navigate(route) {
+        window.history.pushState({}, '', route);
         this.render(route);
     }
 
@@ -65,12 +70,12 @@ export class Router {
     handleInitialLoad() {
         if (window.location.href != "/login") {
             if (!authentication.isAuthenticated()) {
-                this.navigate('/login', true)
+                this.navigate('/login')
                 return
             }
         }
         console.log('Page loaded');
         const initialRoute = window.location.pathname;
-        this.navigate(initialRoute, true);
+        this.navigate(initialRoute);
     }
 }

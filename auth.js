@@ -1,5 +1,7 @@
 export class authentication {
     static isAuthenticated() {
+        // undefined --> true --> false 
+        // jwt --> false --> true 
         return !!localStorage.getItem("jwt");
     }
 

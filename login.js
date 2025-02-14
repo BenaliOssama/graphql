@@ -1,3 +1,5 @@
+
+
 export class LogInPage {
     render() {
         return `
@@ -30,7 +32,7 @@ export class LogInPage {
 
                 const jwt = await response.json();
                 localStorage.setItem('jwt', jwt);
-                window.location.href = '/profile';
+                window.location.href = '/';
             } catch (error) {
                 document.getElementById('errorMessage').textContent = 'Invalid credentials';
             }
