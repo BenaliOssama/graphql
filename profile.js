@@ -25,6 +25,10 @@ export class ProfilePage {
                         <h3>Audit Ratio</h3>
                         <p id="auditRatio">0</p>
                     </div>
+                    <div class="stat-box">
+                        <h3>Audit Ratio</h3>
+                        <p id="currentLevel">0</p>
+                    </div>
                 </section>
 
                 <section class="graphs">
@@ -74,12 +78,14 @@ export class ProfilePage {
             console.log(totalXpRes.data.transaction_aggregate.aggregate.sum.amount);
             console.log(individualXpRes.data);
             console.log(currentLevelRes);
+            console.log('max level', currentLevelRes.data.transaction_aggregate.aggregate.max.amount)// the max level)
             console.log(skillRes.data.transaction);
             console.log(auditRes);
             console.log(lastProjectsRes);
             displayUserInfo(userRes.data.user[0]);
             displayAuditInfo(userRes.data.user[0]);
-            displayTotalXp(totalXpRes.data) 
+            displayTotalXp(totalXpRes.data)
+            displayLevel(currentLevelRes.data)
             processXpData(totalXpRes.data)
             createSpiderWebSkillsChart(skillRes.data.transaction);
         }
@@ -108,6 +114,25 @@ export class ProfilePage {
             document.getElementById('totalXp').innerHTML = `${data.transaction_aggregate.aggregate.sum.amount}`
 
         }
+        function displayLevel(data) {
+            document.getElementById('currentLevel').innerHTML = `
+            <div class="stat level">
+                <h3>Level</h3>
+                <svg width="150" height="150" viewBox="0 0 150 150">
+                    <!-- Background Circle -->
+                    <circle cx="75" cy="75" r="60" fill="none" stroke="#ddd" stroke-width="10"/>
+                    
+                    <!-- Progress Circle -->
+                    <circle cx="75" cy="75" r="60" fill="none" stroke="#4caf50" stroke-width="10" stroke-linecap="round"/>
+                    
+                    <!-- Centered Text -->
+                    <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="20" fill="#333">
+                        ${data.transaction_aggregate.aggregate.max.amount}
+                    </text>
+                </svg>
+            </div>`;
+        }
+
         //console.log('it is defined', skillRes.data.transaction)
         function processXpData(transactions) {
             // Process data for graphs
