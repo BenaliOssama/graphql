@@ -28,9 +28,9 @@ export class ProfilePage {
                 </section>
 
                 <section class="graphs">
+                    <div id="chart-container"></div>
                     <div class="graph-container" id="xpOverTime"></div>
                     <div class="graph-container" id="projectsXp"></div>
-                    <div id="chart-container"></div>
                 </section>
             </div>
         `;
@@ -71,13 +71,15 @@ export class ProfilePage {
             ]);
 
             console.log(userRes.data);
-            console.log(totalXpRes.data);
+            console.log(totalXpRes.data.transaction_aggregate.aggregate.sum.amount);
             console.log(individualXpRes.data);
             console.log(currentLevelRes);
             console.log(skillRes.data.transaction);
             console.log(auditRes);
             console.log(lastProjectsRes);
-            displayUserInfo(userRes.data.user[0])
+            displayUserInfo(userRes.data.user[0]);
+            displayAuditInfo(userRes.data.user[0]);
+            displayTotalXp(totalXpRes.data) 
             processXpData(totalXpRes.data)
             createSpiderWebSkillsChart(skillRes.data.transaction);
         }
@@ -89,7 +91,10 @@ export class ProfilePage {
                 <p>Campus: ${user.campus}</p>
                 <p>Email: ${user.attrs.email}</p>
                 <p>City: ${user.attrs.city}</p>
-            </div>
+            </div>`;
+        }
+        function displayAuditInfo(user) {
+            document.getElementById('auditRatio').innerHTML = `
             <div id="audit_ratio">
                 <p>auditRatio ${user.auditRatio}</p>
                 <p>totalUp ${user.totalUp}</p>
@@ -97,7 +102,12 @@ export class ProfilePage {
             <div>
         `;
         }
+        //totalXpRes.data.transaction_aggregate.aggregate.sum.amount
+        function displayTotalXp(data) {
+            console.log(data.transaction_aggregate.aggregate.sum.amount)
+            document.getElementById('totalXp').innerHTML = `${data.transaction_aggregate.aggregate.sum.amount}`
 
+        }
         //console.log('it is defined', skillRes.data.transaction)
         function processXpData(transactions) {
             // Process data for graphs

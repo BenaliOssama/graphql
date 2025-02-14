@@ -3,16 +3,16 @@ export class SpiderWebChart {
         this.container = document.getElementById(containerId);
         this.data = data;
         this.outerCircle = 25,
-        this.options = {
-            width: 500,
-            height: 500,
-            levels: 5,
-            maxValue: 10,
-            ...options
-        };
+            this.options = {
+                width: 500,
+                height: 500,
+                levels: 5,
+                maxValue: 10,
+                ...options
+            };
         this.svg = null;
         this.radius = options.radius || Math.min(this.options.width, this.options.height) / 2;
-        this.angleSlice = (Math.PI * 2) / this.data.length ;
+        this.angleSlice = (Math.PI * 2) / this.data.length;
     }
 
     draw() {
@@ -27,7 +27,11 @@ export class SpiderWebChart {
     }
 
     createSVG() {
+        // viewBox = "minX minY width height" ensures scaling.
+        // preserveAspectRatio = "xMidYMid meet" keeps proportions.
         this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        this.svg.setAttribute("viewBox", "0 0 500 500");
+        this.svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
         this.svg.setAttribute("width", this.options.width);
         this.svg.setAttribute("height", this.options.height);
         this.container.appendChild(this.svg);
@@ -55,8 +59,8 @@ export class SpiderWebChart {
             const x = centerX + Math.cos(Math.PI / 2 - angle) * this.radius;
             const y = centerY + Math.sin(Math.PI / 2 - angle) * this.radius;
 
-            const xt = centerX + Math.cos(Math.PI / 2 - angle) * (this.radius + this.outerCircle) ;
-            const yt = centerY + Math.sin(Math.PI / 2 - angle) * (this.radius + this.outerCircle) ;
+            const xt = centerX + Math.cos(Math.PI / 2 - angle) * (this.radius + this.outerCircle);
+            const yt = centerY + Math.sin(Math.PI / 2 - angle) * (this.radius + this.outerCircle);
 
             const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
             line.setAttribute("x1", centerX);
@@ -67,8 +71,8 @@ export class SpiderWebChart {
             this.svg.appendChild(line);
 
             const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-            text.setAttribute("x", xt  );
-            text.setAttribute("y", yt  );
+            text.setAttribute("x", xt);
+            text.setAttribute("y", yt);
             //text-anchor="middle" fill="red" font-size="30"
             text.setAttribute("text-anchor", "middle");
             text.setAttribute("fill", "black");
