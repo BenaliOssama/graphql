@@ -6,7 +6,7 @@ export class ProfilePage {
     render() {
         return `
             <header>
-                <h1>My School Profile</h1>
+                <h1>My Profile</h1>
                 <button id="logoutBtn">Logout</button>
             </header>
 
@@ -31,14 +31,14 @@ export class ProfilePage {
                 </section>
 
                 <section class="graphs">
+                    <div class="graph-container" id="projectsXp">
+                        <h3>Total XP</h3>
+                    </div>
                     <div class="spider-web">
                         <h3>Skill Representation</h3>
                         <div id="chart-container"></div>
                     </div>
                     <div class="graph-container" id="xpOverTime">
-                        <h3>Total XP</h3>
-                    </div>
-                    <div class="graph-container" id="projectsXp">
                         <h3>Total XP</h3>
                     </div>
                 </section>

@@ -19,6 +19,7 @@ body {
     margin: 0 auto;
 }
 
+
 .stat-box {
     background: white;
     padding: 20px;
@@ -34,12 +35,13 @@ body {
     border-radius: 8px;
 }
 
-.spider-web{
+.spider-web {
     background: white;
     padding: 20px;
     margin: 20px 0;
     border-radius: 8px;
 }
+
 .error {
     color: red;
     margin-top: 10px;
@@ -50,7 +52,90 @@ svg {
     height: auto;
 }
 
+#basic-info {
+    background: white;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+}
+
+#userName {
+    cursor: pointer;
+    color: #007bff;
+    font-size: 1.5em;
+    margin: 10px 0;
+}
+
+#userName:hover {
+    text-decoration: underline;
+}
+
+#userDetails {
+    background: white;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+}
+
+#userDetails p {
+    margin: 5px 0;
+    font-size: 1.1em;
+}
+
+#userDetails p:first-child {
+    font-weight: bold;
+}
+
 @media screen and (min-width: 48rem) {
+    .stats {
+        display: flex;
+        justify-content: space-around;
+        /* Adjusts spacing between items */
+        align-items: center;
+        gap: 20px;
+        /* Adds space between elements */
+        padding: 10px;
+        flex-wrap: wrap;
+        /* Ensures responsiveness */
+    }
+
+    .stat-box {
+        background: #f9f9f9;
+        padding: 15px;
+        border-radius: 8px;
+        text-align: center;
+        flex: 1;
+        /* Makes all boxes equal width */
+        min-width: 150px;
+        /* Prevents boxes from becoming too small */
+    }
+
+    .graphs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    #projectsXp,
+    .spider-web {
+        flex: 1;
+        /* Makes them equal width */
+        min-width: 300px;
+        /* Prevents shrinking too much */
+    }
+
+    .spider-web {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1;
+    }
+
+    #xpOverTime {
+        flex-basis: 100%;
+        /* Makes it take the full width */
+    }
+
     svg {
         width: 100;
         height: auto;
