@@ -15,8 +15,9 @@ export const queries = {
   totalXpQuery: `{
     transaction_aggregate(where: { 
       type: { _eq: "xp" }, 
-      eventId: { _eq: 41 }
+      #eventId: { _eq: 41 }
       #eventId: { _nin: [11, 67] }
+      eventId: { _in: [41, 11] }
       }) {
         aggregate {
           sum {

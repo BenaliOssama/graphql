@@ -145,36 +145,46 @@ class Display {
     }
 
 
+
     static displayAuditInfo(user) {
         document.getElementById('auditRatio').innerHTML = `
-            <div id="audit_ratio">
-                <p>auditRatio ${user.auditRatio}</p>
-                <p>totalUp ${user.totalUp}</p>
-                <p>totoalDown ${user.totalDown}</p>
-            <div>
-        `;
+        <div id="audit_ratio">
+            <p>Audit Ratio: ${parseFloat(user.auditRatio).toFixed(1)}</p>
+            <p>Total Up: ${formatBytes(user.totalUp)}</p>
+            <p>Total Down: ${formatBytes(user.totalDown)}</p>
+        </div>
+    `;
     }
-    //totalXpRes.data.transaction_aggregate.aggregate.sum.amount
-    static displayTotalXp(data) {
-        console.log(data.transaction_aggregate.aggregate.sum.amount)
-        document.getElementById('totalXp').innerHTML = `${data.transaction_aggregate.aggregate.sum.amount}`
 
+    static displayTotalXp(data) {
+        console.log(data.transaction_aggregate.aggregate.sum.amount);
+        document.getElementById('totalXp').innerHTML = `
+        <span class="large-number">${formatBytes(data.transaction_aggregate.aggregate.sum.amount)}</span>
+    `;
     }
+
     static displayLevel(data) {
         document.getElementById('currentLevel').innerHTML = `
-            <div class="stat level">
-                <svg width="150" height="150" viewBox="0 0 150 150">
-                    <!-- Background Circle -->
-                    <circle cx="75" cy="75" r="60" fill="none" stroke="#ddd" stroke-width="10"/>
-                    
-                    <!-- Progress Circle -->
-                    <circle cx="75" cy="75" r="60" fill="none" stroke="#4caf50" stroke-width="10" stroke-linecap="round"/>
-                    
-                    <!-- Centered Text -->
-                    <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="20" fill="#333">
-                        ${data.transaction_aggregate.aggregate.max.amount}
-                    </text>
-                </svg>
-            </div>`;
+    <div class="stat level">
+        <svg width="100%" height="auto" viewBox="0 0 150 150" style="max-width: 150px; width: 100%; height: auto;">
+            <!-- Background Circle -->
+            <circle cx="75" cy="75" r="60" fill="none" stroke="#ddd" stroke-width="10"/>
+            
+            <!-- Progress Circle -->
+            <circle cx="75" cy="75" r="60" fill="none" stroke="#007BFF" stroke-width="10" stroke-linecap="round"/>
+            
+            <!-- Centered Text -->
+            <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="20" fill="#333">
+                ${data.transaction_aggregate.aggregate.max.amount}
+            </text>
+        </svg>
+    </div>`;
+
     }
+}
+function formatBytes(bytes) {
+    if (bytes === 0) return '0 B';
+    const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+    return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
 }
