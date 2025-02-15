@@ -12,7 +12,6 @@ export class ProfilePage {
 
             <div class="profile-container">
                 <section class="user-info">
-                    <h2>Basic Information</h2>
                     <div id="basicInfo"></div>
                 </section>
 
@@ -116,14 +115,36 @@ export class ProfilePage {
 
 class Display {
     static displayUserInfo(user) {
-        document.getElementById('basicInfo').innerHTML = `
-            <div id="basic info" >
-                <p>${user.firstName} ${user.lastName}</p>
+        const basicInfoDiv = document.getElementById('basicInfo');
+
+        // Set up the initial display (only showing the name)
+        basicInfoDiv.innerHTML = `
+        <div id="basic-info">
+            <h2 id="userName">${user.firstName} ${user.lastName}</h2>
+        </div>`;
+
+        // Add event listener to the name to toggle details
+        document.getElementById('userName').addEventListener('click', () => {
+            let userDetailsDiv = document.getElementById('userDetails');
+
+            if (!userDetailsDiv) {
+                // If details are not visible, create them
+                userDetailsDiv = document.createElement('div');
+                userDetailsDiv.id = 'userDetails';
+                userDetailsDiv.innerHTML = `
                 <p>Campus: ${user.campus}</p>
                 <p>Email: ${user.attrs.email}</p>
                 <p>City: ${user.attrs.city}</p>
-            </div>`;
+            `;
+                basicInfoDiv.appendChild(userDetailsDiv);
+            } else {
+                // If details are visible, remove them
+                userDetailsDiv.remove();
+            }
+        });
     }
+
+
     static displayAuditInfo(user) {
         document.getElementById('auditRatio').innerHTML = `
             <div id="audit_ratio">
