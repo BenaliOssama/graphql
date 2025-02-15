@@ -34,7 +34,7 @@ body {
     border-radius: 8px;
 }
 
-#chart-container {
+.spider-web{
     background: white;
     padding: 20px;
     margin: 20px 0;

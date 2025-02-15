@@ -32,9 +32,16 @@ export class ProfilePage {
                 </section>
 
                 <section class="graphs">
-                    <div id="chart-container"></div>
-                    <div class="graph-container" id="xpOverTime"></div>
-                    <div class="graph-container" id="projectsXp"></div>
+                    <div class="spider-web">
+                        <h3>Skill Representation</h3>
+                        <div id="chart-container"></div>
+                    </div>
+                    <div class="graph-container" id="xpOverTime">
+                        <h3>Total XP</h3>
+                    </div>
+                    <div class="graph-container" id="projectsXp">
+                        <h3>Total XP</h3>
+                    </div>
                 </section>
             </div>
         `;
@@ -74,9 +81,9 @@ export class ProfilePage {
                 fetchGraphQL(queries.lastProjectsQuery)
             ]);
 
-            console.log('incividual xp',individualXpRes.data);
+            console.log('incividual xp', individualXpRes.data);
             console.log('audit Res', auditRes);
-            console.log('last projects',lastProjectsRes);
+            console.log('last projects', lastProjectsRes);
 
             Display.displayUserInfo(userRes.data.user[0]);
             Display.displayAuditInfo(userRes.data.user[0]);
