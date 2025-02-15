@@ -16,18 +16,21 @@ export class ProfilePage {
                 </section>
 
                 <section class="stats">
+                <section class="stats">
                     <div class="stat-box">
                         <h3>Total XP</h3>
                         <p id="totalXp">0</p>
-                        <p id="lastProjectDetails"><p>
+                        <p id="lastProjectDetails"></p>
                     </div>
-                    <div class="stat-box">
-                        <h3>Audit Ratio</h3>
-                        <p id="auditRatio">0</p>
-                    </div>
-                    <div class="stat-box">
-                        <h3>Level</h3>
-                        <p id="currentLevel">0</p>
+                    <div class="stat-box-wrapper">
+                        <div class="stat-box">
+                            <h3>Audit Ratio</h3>
+                            <p id="auditRatio">0</p>
+                        </div>
+                        <div class="stat-box">
+                            <h3>Level</h3>
+                            <p id="currentLevel">0</p>
+                        </div>
                     </div>
                 </section>
 
@@ -171,15 +174,14 @@ class Display {
             // Create a container div for each project
             const p = document.createElement('div');
 
-            // Format the creation date (you can use a library like `moment.js` or `date-fns`, or use `Intl.DateTimeFormat`)
-            const formattedDate = new Date(project.createdAt).toLocaleString(); // Customize the date format as needed
+            // Format the creation date to only show year, month, and day
+            const formattedDate = new Date(project.createdAt).toLocaleDateString('en-GB'); // Format as DD/MM/YYYY
+
 
             // Set the innerHTML with the formatted content
             p.innerHTML = `
             <div class="project-card">
-                <h3>${project.object.name}</h3>
-                <p><strong>Amount:</strong> ${formatBytes(project.amount)}</p>
-                <p><strong>Date:</strong> ${formattedDate}</p>
+                <p>${project.object.name}: ${formatBytes(project.amount)}: ${formattedDate}</p>
             </div>
             `;
 
