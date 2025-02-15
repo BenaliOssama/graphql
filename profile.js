@@ -74,64 +74,19 @@ export class ProfilePage {
                 fetchGraphQL(queries.lastProjectsQuery)
             ]);
 
-            console.log(userRes.data);
-            console.log(totalXpRes.data.transaction_aggregate.aggregate.sum.amount);
-            console.log(individualXpRes.data);
-            console.log(currentLevelRes);
-            console.log('max level', currentLevelRes.data.transaction_aggregate.aggregate.max.amount)// the max level)
-            console.log(skillRes.data.transaction);
-            console.log(auditRes);
-            console.log(lastProjectsRes);
-            displayUserInfo(userRes.data.user[0]);
-            displayAuditInfo(userRes.data.user[0]);
-            displayTotalXp(totalXpRes.data)
-            displayLevel(currentLevelRes.data)
+            console.log('incividual xp',individualXpRes.data);
+            console.log('audit Res', auditRes);
+            console.log('last projects',lastProjectsRes);
+
+            Display.displayUserInfo(userRes.data.user[0]);
+            Display.displayAuditInfo(userRes.data.user[0]);
+            Display.displayTotalXp(totalXpRes.data)
+            Display.displayLevel(currentLevelRes.data)
+
             processXpData(totalXpRes.data)
             createSpiderWebSkillsChart(skillRes.data.transaction);
         }
 
-        function displayUserInfo(user) {
-            document.getElementById('basicInfo').innerHTML = `
-            <div id="basic info" >
-                <p>${user.firstName} ${user.lastName}</p>
-                <p>Campus: ${user.campus}</p>
-                <p>Email: ${user.attrs.email}</p>
-                <p>City: ${user.attrs.city}</p>
-            </div>`;
-        }
-        function displayAuditInfo(user) {
-            document.getElementById('auditRatio').innerHTML = `
-            <div id="audit_ratio">
-                <p>auditRatio ${user.auditRatio}</p>
-                <p>totalUp ${user.totalUp}</p>
-                <p>totoalDown ${user.totalDown}</p>
-            <div>
-        `;
-        }
-        //totalXpRes.data.transaction_aggregate.aggregate.sum.amount
-        function displayTotalXp(data) {
-            console.log(data.transaction_aggregate.aggregate.sum.amount)
-            document.getElementById('totalXp').innerHTML = `${data.transaction_aggregate.aggregate.sum.amount}`
-
-        }
-        function displayLevel(data) {
-            document.getElementById('currentLevel').innerHTML = `
-            <div class="stat level">
-                <h3>Level</h3>
-                <svg width="150" height="150" viewBox="0 0 150 150">
-                    <!-- Background Circle -->
-                    <circle cx="75" cy="75" r="60" fill="none" stroke="#ddd" stroke-width="10"/>
-                    
-                    <!-- Progress Circle -->
-                    <circle cx="75" cy="75" r="60" fill="none" stroke="#4caf50" stroke-width="10" stroke-linecap="round"/>
-                    
-                    <!-- Centered Text -->
-                    <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="20" fill="#333">
-                        ${data.transaction_aggregate.aggregate.max.amount}
-                    </text>
-                </svg>
-            </div>`;
-        }
 
         //console.log('it is defined', skillRes.data.transaction)
         function processXpData(transactions) {
@@ -149,5 +104,50 @@ export class ProfilePage {
         // Cleanup when navigating away
         // this.button.removeEventListener('click', this.handleClick);
         // document.body.removeEventListener('click', this.handleNavigation);
+    }
+}
+
+class Display {
+    static displayUserInfo(user) {
+        document.getElementById('basicInfo').innerHTML = `
+            <div id="basic info" >
+                <p>${user.firstName} ${user.lastName}</p>
+                <p>Campus: ${user.campus}</p>
+                <p>Email: ${user.attrs.email}</p>
+                <p>City: ${user.attrs.city}</p>
+            </div>`;
+    }
+    static displayAuditInfo(user) {
+        document.getElementById('auditRatio').innerHTML = `
+            <div id="audit_ratio">
+                <p>auditRatio ${user.auditRatio}</p>
+                <p>totalUp ${user.totalUp}</p>
+                <p>totoalDown ${user.totalDown}</p>
+            <div>
+        `;
+    }
+    //totalXpRes.data.transaction_aggregate.aggregate.sum.amount
+    static displayTotalXp(data) {
+        console.log(data.transaction_aggregate.aggregate.sum.amount)
+        document.getElementById('totalXp').innerHTML = `${data.transaction_aggregate.aggregate.sum.amount}`
+
+    }
+    static displayLevel(data) {
+        document.getElementById('currentLevel').innerHTML = `
+            <div class="stat level">
+                <h3>Level</h3>
+                <svg width="150" height="150" viewBox="0 0 150 150">
+                    <!-- Background Circle -->
+                    <circle cx="75" cy="75" r="60" fill="none" stroke="#ddd" stroke-width="10"/>
+                    
+                    <!-- Progress Circle -->
+                    <circle cx="75" cy="75" r="60" fill="none" stroke="#4caf50" stroke-width="10" stroke-linecap="round"/>
+                    
+                    <!-- Centered Text -->
+                    <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="20" fill="#333">
+                        ${data.transaction_aggregate.aggregate.max.amount}
+                    </text>
+                </svg>
+            </div>`;
     }
 }

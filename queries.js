@@ -1,30 +1,31 @@
 export const queries = {
   userQuery: `{
-      user{
-        login
-        firstName
-        lastName
-        attrs
-        auditRatio
-        campus
-        totalDown
-        totalUp
+    user{
+      login
+      firstName
+      lastName
+      attrs
+      auditRatio
+      campus
+      totalDown
+      totalUp
     }
   }`,
 
-    totalXpQuery: `{
-      transaction_aggregate(where: { 
-        type: { _eq: "xp" }, 
-        eventId: { _eq: 41 }
-        #eventId: { _nin: [11, 67] }
-        }) {
-          aggregate {
-            sum {
-                amount
-            }
+  totalXpQuery: `{
+    transaction_aggregate(where: { 
+      type: { _eq: "xp" }, 
+      eventId: { _eq: 41 }
+      #eventId: { _nin: [11, 67] }
+      }) {
+        aggregate {
+          sum {
+              amount
           }
+        }
       }
     }`,
+
     individualXpQuery: ` {
             transaction(where: {
                 type: { _eq: "xp" },
@@ -32,6 +33,7 @@ export const queries = {
             }, order_by: { createdAt: desc }) {
                 path
                 amount
+                createdAt
             }
         }`,
     currentLevelQuery: `{
