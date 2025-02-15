@@ -26,7 +26,7 @@ export class ProfilePage {
                         <p id="auditRatio">0</p>
                     </div>
                     <div class="stat-box">
-                        <h3>Audit Ratio</h3>
+                        <h3>Level</h3>
                         <p id="currentLevel">0</p>
                     </div>
                 </section>
@@ -135,7 +135,6 @@ class Display {
     static displayLevel(data) {
         document.getElementById('currentLevel').innerHTML = `
             <div class="stat level">
-                <h3>Level</h3>
                 <svg width="150" height="150" viewBox="0 0 150 150">
                     <!-- Background Circle -->
                     <circle cx="75" cy="75" r="60" fill="none" stroke="#ddd" stroke-width="10"/>

@@ -1,5 +1,6 @@
 import { SpiderWebChart } from "./spiderweb.js";
-/*____________________________xp over time_____________________________*/
+
+/*______________________________xp over time____________________________*/
 export function createXpOverTimeChart(transactions) {
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     // width="100%" height="100%": Ensures the SVG takes up the available space.
@@ -32,6 +33,7 @@ export function createXpOverTimeChart(transactions) {
     xAxis.setAttribute('x1', margin.left);
     xAxis.setAttribute('y1', 400 - margin.bottom);
     xAxis.setAttribute('x2', 600 - margin.right);
+    xAxis.setAttribute('y2', 400 - margin.bottom);
     xAxis.setAttribute('stroke', '#333');
     svg.appendChild(xAxis);
 
@@ -67,141 +69,165 @@ export function createXpOverTimeChart(transactions) {
     path.setAttribute('stroke-width', '2');
     svg.appendChild(path);
 
-    // Add labels
-    dataPoints.forEach((point, i) => {
-        if (i % 2 === 0) { // Add labels for every other data point
-            const x = margin.left +
-                ((point.date - dataPoints[0].date) /
-                    (dataPoints[dataPoints.length - 1].date - dataPoints[0].date)) * width;
+    function roundUpToNearestPowerOfTen(num) {
+        const length = Math.floor(Math.log10(num)); // Find the number of digits minus 1
+        const factor = Math.pow(10, length); // Get 10^length
+        return Math.ceil(num / factor) * factor; // Round up to the nearest multiple of 10^length
+    }
+    // In your chart code:
+    const maxY = roundUpToNearestPowerOfTen(dataPoints[dataPoints.length - 1].cumulative);
+    const minX = dataPoints[0].date;
+    const maxX = dataPoints[dataPoints.length - 1].date;
+    const timeRange = maxX - minX;
+    // Create a dot function
+    function createDot(x, y, radius = 3, color = '#333') {
+        const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        dot.setAttribute('cx', x);
+        dot.setAttribute('cy', y);
+        dot.setAttribute('r', radius);
+        dot.setAttribute('fill', color);
+        return dot;
+    }
+    // Create 10 Y-axis labels
+    for (let i = 0; i <= 10; i++) {
+        const value = (maxY / 10) * i;
+        const y = 400 - margin.bottom - (value / maxY) * height;
 
-            // X-axis labels
-            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-            text.setAttribute('x', x);
-            text.setAttribute('y', 400 - 10);
-            text.setAttribute('text-anchor', 'middle');
-            text.setAttribute('font-size', '10px');
-            text.textContent = point.date.toISOString().slice(0, 10);
-            svg.appendChild(text);
+        const yText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        yText.setAttribute('x', margin.left - 10);
+        yText.setAttribute('y', y);
+        yText.setAttribute('text-anchor', 'end');
+        yText.setAttribute('dominant-baseline', 'middle');
+        yText.setAttribute('font-size', '10px');
+        yText.textContent = Math.round(value).toLocaleString();
+        svg.appendChild(yText);
+    }
+    //Add 10 equally spaced dots along x-axis
+    const xStart = margin.left;
+    const xEnd = 600 - margin.right;
+    const xInterval = (xEnd - xStart) / 9;  // Divide the axis into 10 intervals
 
-            // Y-axis labels
-            const yText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-            yText.setAttribute('x', margin.left - 10);
-            yText.setAttribute('y', 400 - margin.bottom -
-                (point.cumulative / dataPoints[dataPoints.length - 1].cumulative) * height);
-            yText.setAttribute('text-anchor', 'end');
-            yText.setAttribute('dominant-baseline', 'middle');
-            yText.setAttribute('font-size', '10px');
-            yText.textContent = point.cumulative.toLocaleString();
-            svg.appendChild(yText);
-        }
-    });
+    for (let i = 0; i <= 10; i++) {
+        const x = xStart + i * xInterval;
+        svg.appendChild(createDot(x, 400 - margin.bottom, 3, '#333'));
+    }
+    //Create 10 X-axis labels
+    for (let i = 0; i <= 10; i++) {
+        const date = new Date(minX.getTime() + (timeRange / 10) * i);
+        const x = margin.left + (width / 9) * i;
 
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', x);
+        text.setAttribute('y', 400 - 10);
+        text.setAttribute('text-anchor', 'middle');
+        text.setAttribute('font-size', '10px');
+        text.textContent = date.toISOString().slice(0, 10);
+        svg.appendChild(text);
+    }
+    // Add 10 equally spaced dots along y-axis
+    const yStart = margin.top;
+    const yEnd = 400 - margin.bottom;
+    const yInterval = (yEnd - yStart) / 10;  // Divide the axis into 10 intervals
+
+    for (let i = 0; i <= 10; i++) {
+        const y = yStart + i * yInterval;
+        svg.appendChild(createDot(margin.left, y, 3, '#333'));
+    }
     document.getElementById('xpOverTime').appendChild(svg);
 }
 
-/*_________________________ projects xp chart _________________________*/
+
+/*______________________________projects xp____________________________*/
 export function createProjectsXpChart(transactions) {
     const container = document.getElementById('projectsXp');
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.setAttribute('width', '100%');
-    svg.setAttribute('height', '100%');
+
+    // Set responsive attributes
+    svg.setAttribute('viewBox', `0 0 600 400`);
     svg.setAttribute('preserveAspectRatio', 'xMinYMin meet');
+    svg.style.width = '100%';
+    svg.style.height = 'auto';
+    svg.style.maxHeight = '100vh';
 
     // Aggregate XP per project
     const projects = {};
-
     transactions.forEach(t => {
-        projects[t.path] =  t.amount;
+        projects[t.path] = t.amount;
     });
 
-    const projectEntries = Object.entries(projects).sort(([, a], [, b]) => b - a).slice(0, 10);
+    const projectEntries = Object.entries(projects)
+        .sort(([, a], [, b]) => b - a).slice(0, 10);
 
-    // Dynamic sizing
-    const calculateDimensions = () => {
-        const containerWidth = container.offsetWidth;
-        const containerHeight = container.offsetHeight;
-
-        // Calculate dynamic margins based on text length
-        const tempText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        tempText.textContent = projectEntries.reduce((longest, [project]) =>
-            project.length > longest.length ? project : longest, ''
-        ).split('/').pop();
-        svg.appendChild(tempText);
-        const textWidth = tempText.getBBox().width;
-        svg.removeChild(tempText);
-
-        return {
-            margin: {
-                top: 20,
-                right: 20,
-                bottom: 40,
-                left: textWidth  // Dynamic left margin based on longest text
-            },
-            barHeight: Math.min(30, containerHeight * 0.05),
-            spacing: 10,
-            containerWidth,
-            containerHeight
-        };
-    };
-    const drawChart = () => {
-        while (svg.firstChild) svg.removeChild(svg.firstChild);
-
-        const { margin, barHeight, spacing, containerWidth, containerHeight } = calculateDimensions();
-        const maxAmount = Math.max(...Object.values(projects));
-        const chartHeight = projectEntries.length * (barHeight + spacing) + margin.top;
-
-        // Set viewBox dynamically
-        svg.setAttribute('viewBox', `0 0 ${containerWidth} ${Math.max(chartHeight, containerHeight)}`);
-
-        // Create bars
-        projectEntries.forEach(([project, amount], i) => {
-            const y = margin.top + (i * (barHeight + spacing));
-            const width = (amount / maxAmount) * (containerWidth - margin.left - margin.right );
-
-            // Bar element
-            const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-            rect.setAttribute('x', margin.left);
-            rect.setAttribute('y', y);
-            rect.setAttribute('width', width);
-            rect.setAttribute('height', barHeight);
-            rect.setAttribute('fill', '#4a90e2');
-            svg.appendChild(rect);
-
-            // Project label
-            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-            text.setAttribute('x', margin.left - 10);
-            text.setAttribute('y', y + barHeight / 2);
-            text.setAttribute('text-anchor', 'end');
-            text.setAttribute('dominant-baseline', 'middle');
-            text.setAttribute('font-size', `${Math.min(14, barHeight * 0.8)}px`);
-            text.textContent = project.split('/').pop();
-            svg.appendChild(text);
-
-            // Amount label
-            const amountText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-            amountText.setAttribute('x', margin.left + width + 5);
-            amountText.setAttribute('y', y + barHeight / 2);
-            amountText.setAttribute('dominant-baseline', 'middle');
-            amountText.setAttribute('font-size', `${Math.min(12, barHeight * 0.7)}px`);
-            amountText.textContent = amount.toLocaleString();
-            svg.appendChild(amountText);
-        });
+    // Calculate dynamic dimensions
+    const margin = {
+        left: 180,
+        right: 120,
+        top: 30,
+        bottom: 30
     };
 
-    // Initial draw
-    drawChart();
+    // Measure longest project name
+    const tempSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    const tempText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    tempText.textContent = projectEntries.reduce((a, [p]) =>
+        p.split('/').pop().length > a.length ? p.split('/').pop() : a, ''
+    );
+    tempSvg.appendChild(tempText);
+    document.body.appendChild(tempSvg);
+    const textWidth = tempText.getBBox().width;
+    document.body.removeChild(tempSvg);
 
-    // Resize observer
-    const resizeObserver = new ResizeObserver(() => {
-        drawChart();
+    // Adjust left margin based on longest text
+    margin.left = Math.min(Math.max(textWidth + 20, 180), 300);
+
+    // Calculate bar dimensions
+    const barHeight = 28;
+    const spacing = 12;
+    const chartHeight = margin.top +
+        (projectEntries.length * (barHeight + spacing)) +
+        margin.bottom;
+
+    // Update viewBox height
+    svg.setAttribute('viewBox', `0 0 600 ${chartHeight}`);
+
+    // Create bars
+    projectEntries.forEach(([project, amount], i) => {
+        const y = margin.top + (i * (barHeight + spacing));
+        const maxWidth = 600 - margin.left - margin.right;
+        const width = (amount / Math.max(...Object.values(projects))) * maxWidth;
+
+        // Bar element
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', margin.left);
+        rect.setAttribute('y', y);
+        rect.setAttribute('width', width);
+        rect.setAttribute('height', barHeight);
+        rect.setAttribute('fill', '#4a90e2');
+        svg.appendChild(rect);
+
+        // Project label
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', margin.left - 10);
+        text.setAttribute('y', y + barHeight / 2);
+        text.setAttribute('text-anchor', 'end');
+        text.setAttribute('dominant-baseline', 'middle');
+        text.setAttribute('font-size', '1.2em');
+        text.textContent = project.split('/').pop();
+        svg.appendChild(text);
+
+        // Amount label
+        const amountText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        amountText.setAttribute('x', margin.left + width + 5);
+        amountText.setAttribute('y', y + barHeight / 2);
+        amountText.setAttribute('dominant-baseline', 'middle');
+        amountText.setAttribute('font-size', '1em');
+        amountText.textContent = amount.toLocaleString();
+        svg.appendChild(amountText);
     });
-    resizeObserver.observe(container);
 
     container.appendChild(svg);
 }
-
-
-/*________________________________ spiderWeb chart ____________________________*/
+/*______________________________spider web chart____________________________*/
 export function createSpiderWebSkillsChart(unfilteredData) {
     // filter data removing dublicates and choosing the top skill
     // order data from largest to smallest
