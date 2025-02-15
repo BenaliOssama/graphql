@@ -51,10 +51,6 @@ svg {
 }
 
 @media screen and (min-width: 48rem) {
-    * {
-        background-color: black;
-    }
-
     svg {
         width: 100;
         height: auto;

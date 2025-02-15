@@ -83,7 +83,7 @@ export class ProfilePage {
             Display.displayTotalXp(totalXpRes.data)
             Display.displayLevel(currentLevelRes.data)
 
-            processXpData(totalXpRes.data)
+            processXpData(individualXpRes.data.transaction)
             createSpiderWebSkillsChart(skillRes.data.transaction);
         }
 
