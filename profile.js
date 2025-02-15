@@ -19,6 +19,7 @@ export class ProfilePage {
                     <div class="stat-box">
                         <h3>Total XP</h3>
                         <p id="totalXp">0</p>
+                        <p id="lastProjectDetails"><p>
                     </div>
                     <div class="stat-box">
                         <h3>Audit Ratio</h3>
@@ -82,11 +83,13 @@ export class ProfilePage {
 
             console.log('incividual xp', individualXpRes.data);
             console.log('audit Res', auditRes);
-            console.log('last projects', lastProjectsRes);
+            console.log('last projects', lastProjectsRes.data.user[0].transactions[0].amount);
+            console.log('last projects', lastProjectsRes.data.user[0].transactions[0].createdAt);
+            console.log('last projects', lastProjectsRes.data.user[0].transactions[0].object.name);
 
             Display.displayUserInfo(userRes.data.user[0]);
             Display.displayAuditInfo(userRes.data.user[0]);
-            Display.displayTotalXp(totalXpRes.data)
+            Display.displayTotalXp(totalXpRes.data, lastProjectsRes.data)
             Display.displayLevel(currentLevelRes.data)
 
             processXpData(individualXpRes.data.transaction)
@@ -156,11 +159,34 @@ class Display {
     `;
     }
 
-    static displayTotalXp(data) {
+    static displayTotalXp(data, lastProjectsRes) {
         console.log(data.transaction_aggregate.aggregate.sum.amount);
         document.getElementById('totalXp').innerHTML = `
         <span class="large-number">${formatBytes(data.transaction_aggregate.aggregate.sum.amount)}</span>
     `;
+        // Display Last Project details
+        const projects = lastProjectsRes.user[0].transactions;
+
+        projects.forEach((project) => {
+            // Create a container div for each project
+            const p = document.createElement('div');
+
+            // Format the creation date (you can use a library like `moment.js` or `date-fns`, or use `Intl.DateTimeFormat`)
+            const formattedDate = new Date(project.createdAt).toLocaleString(); // Customize the date format as needed
+
+            // Set the innerHTML with the formatted content
+            p.innerHTML = `
+            <div class="project-card">
+                <h3>${project.object.name}</h3>
+                <p><strong>Amount:</strong> ${formatBytes(project.amount)}</p>
+                <p><strong>Date:</strong> ${formattedDate}</p>
+            </div>
+            `;
+
+            // Append the project card to the 'lastProjectDetails' container
+            document.getElementById('lastProjectDetails').appendChild(p);
+        });
+
     }
 
     static displayLevel(data) {
