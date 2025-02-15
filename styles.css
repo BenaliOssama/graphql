@@ -93,7 +93,7 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    background-color: #f4f4f4;
+    background-color: white;
     border-bottom: 2px solid #ddd;
 }
 
@@ -183,7 +183,7 @@ input[type="password"] {
     }
 
     .stat-box {
-        background: #f9f9f9;
+        background-color: white;
         padding: 15px;
         border-radius: 8px;
         text-align: center;

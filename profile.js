@@ -74,23 +74,39 @@ export class ProfilePage {
 
         // Example query for user data
         async function loadProfile() {
-            const [userRes, totalXpRes, individualXpRes, currentLevelRes, skillRes, auditRes, lastProjectsRes] = await Promise.all([
+            const [userRes, userCohortRes, totalXpRes, individualXpRes, currentLevelRes, skillRes, auditRes, lastProjectsRes] = await Promise.all([
                 fetchGraphQL(queries.userQuery),
-                fetchGraphQL(queries.totalXpQuery),
+                fetchGraphQL(queries.userCohortQuery),
+                fetchGraphQL(queries.totalXpQuery(41)),
                 fetchGraphQL(queries.individualXpQuery),
                 fetchGraphQL(queries.currentLevelQuery),
                 fetchGraphQL(queries.skillQuery),
                 fetchGraphQL(queries.auditQuery),
                 fetchGraphQL(queries.lastProjectsQuery)
             ]);
-
+            console.log(userRes.data)
+            console.log('cohort', userCohortRes.data)
+            console.log('total xp', totalXpRes.data)
             console.log('incividual xp', individualXpRes.data);
             console.log('audit Res', auditRes);
             console.log('last projects', lastProjectsRes.data.user[0].transactions[0].amount);
             console.log('last projects', lastProjectsRes.data.user[0].transactions[0].createdAt);
             console.log('last projects', lastProjectsRes.data.user[0].transactions[0].object.name);
+            // Assuming you have the GraphQL response data in `data`
+            const filteredEvents = userCohortRes.data.user[0].events.filter(event =>
+                event.event.object.name === "Module" && event.event.object.type === "module"
+            );
 
-            Display.displayUserInfo(userRes.data.user[0]);
+            console.log('filterd cohort', filteredEvents[0].event.startAt);
+            const date = new Date(filteredEvents[0].event.startAt);
+            const cohortId = filteredEvents[0].event.id;
+            console.log('cohort id',cohortId)
+
+            // Format as "YYYY-MM-DD"
+            const formattedDate = date.toISOString().split('T')[0];
+            console.log('filtered date', formattedDate)
+
+            Display.displayUserInfo(userRes.data.user[0], formattedDate);
             Display.displayAuditInfo(userRes.data.user[0]);
             Display.displayTotalXp(totalXpRes.data, lastProjectsRes.data)
             Display.displayLevel(currentLevelRes.data)
@@ -120,13 +136,14 @@ export class ProfilePage {
 }
 
 class Display {
-    static displayUserInfo(user) {
+    static displayUserInfo(user, formattedDate) {
         const basicInfoDiv = document.getElementById('basicInfo');
 
         // Set up the initial display (only showing the name)
         basicInfoDiv.innerHTML = `
         <div id="basic-info">
             <h2 id="userName">${user.firstName} ${user.lastName}</h2>
+            <h3> Cohort: ${formattedDate}</h3>
         </div>`;
 
         // Add event listener to the name to toggle details
@@ -138,6 +155,7 @@ class Display {
                 userDetailsDiv = document.createElement('div');
                 userDetailsDiv.id = 'userDetails';
                 userDetailsDiv.innerHTML = `
+                <p>Cohort: ${formattedDate}</p>
                 <p>Campus: ${user.campus}</p>
                 <p>Email: ${user.attrs.email}</p>
                 <p>City: ${user.attrs.city}</p>
@@ -193,23 +211,23 @@ class Display {
 
     static displayLevel(data) {
         document.getElementById('currentLevel').innerHTML = `
-    <div class="stat level">
-        <svg width="100%" height="auto" viewBox="0 0 150 150" style="max-width: 150px; width: 100%; height: auto;">
-            <!-- Background Circle -->
-            <circle cx="75" cy="75" r="60" fill="none" stroke="#ddd" stroke-width="10"/>
-            
-            <!-- Progress Circle -->
-            <circle cx="75" cy="75" r="60" fill="none" stroke="#007BFF" stroke-width="10" stroke-linecap="round"/>
-            
-            <!-- Centered Text -->
-            <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="20" fill="#333">
-                ${data.transaction_aggregate.aggregate.max.amount}
-            </text>
-        </svg>
-    </div>`;
-
+        <div class="stat level">
+            <svg width="100%" height="auto" viewBox="0 0 150 150" style="max-width: 150px; width: 100%; height: auto;">
+                <!-- Background Circle -->
+                <circle cx="75" cy="75" r="60" fill="none" stroke="#ddd" stroke-width="10"/>
+                
+                <!-- Progress Circle -->
+                <circle cx="75" cy="75" r="60" fill="none" stroke="#007BFF" stroke-width="10" stroke-linecap="round"/>
+                
+                <!-- Centered Text -->
+                <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="20" fill="#333">
+                    ${data.transaction_aggregate.aggregate.max.amount}
+                </text>
+            </svg>
+        </div>`;
     }
 }
+
 function formatBytes(bytes) {
     if (bytes === 0) return '0 B';
     const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];

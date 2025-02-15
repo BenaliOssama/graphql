@@ -12,12 +12,13 @@ export const queries = {
     }
   }`,
 
-  totalXpQuery: `{
+  totalXpQuery: function(module){
+    return `{
     transaction_aggregate(where: { 
       type: { _eq: "xp" }, 
-      #eventId: { _eq: 41 }
+      eventId: { _eq: ${module}}
       #eventId: { _nin: [11, 67] }
-      eventId: { _in: [41, 11] }
+      #eventId: { _in: [41, 11] }
       }) {
         aggregate {
           sum {
@@ -25,9 +26,10 @@ export const queries = {
           }
         }
       }
-    }`,
+    }`
+  },
 
-    individualXpQuery: ` {
+  individualXpQuery: ` {
             transaction(where: {
                 type: { _eq: "xp" },
                 eventId: { _eq: 41 }
@@ -37,7 +39,7 @@ export const queries = {
                 createdAt
             }
         }`,
-    currentLevelQuery: `{
+  currentLevelQuery: `{
         transaction_aggregate(
             where:{
                 type: { _eq: "level" }
@@ -46,7 +48,7 @@ export const queries = {
             order_by: { createdAt: desc }){aggregate {max {amount}}}
         }`,
 
-    skillQuery: `{
+  skillQuery: `{
             transaction(
                 where: { type: { _like: "skill%" } }
                 order_by: { amount: desc }) {
@@ -54,7 +56,7 @@ export const queries = {
                 amount
             }
         }`,
-    lastProjectsQuery : `{
+  lastProjectsQuery: `{
           user {
             transactions(limit: 3, where: {type: {_eq: "xp"}}, order_by: {createdAt: desc}) {
               object {
@@ -65,7 +67,7 @@ export const queries = {
             }
           }
         }`,
-    auditQuery: `{
+  auditQuery: `{
           user {
             audits_aggregate(where: {closureType: {_eq: succeeded}}) {
               aggregate {
@@ -78,5 +80,19 @@ export const queries = {
               }
             }
           }
-        }`
+          }`,
+  userCohortQuery: `{
+  user {
+	events{
+      event {
+        object {
+          name 
+          type
+        }
+        startAt
+        id
+      }
+    }
+  }
+}`
 }
