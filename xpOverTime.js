@@ -23,8 +23,11 @@ export function createXpOverTimeChart(transactions, cohortInfo, xMonths) {
 
     // In your chart code:
     const maxY = roundUpToNearestPowerOfTen(dataPoints[dataPoints.length - 1].cumulative);
-    const minX = dataPoints[0].date;
-    const maxX = dataPoints[dataPoints.length - 1].date;
+
+    const maxX = new Date(); // Get the current date and time
+    const minX = new Date(maxX); // Copy maxX date
+    minX.setMonth(maxX.getMonth() - xMonths); // Subtract x months from maxX to get minX
+
     const timeRange = maxX - minX;
 
     // Create 10 Y-axis labels
@@ -42,37 +45,22 @@ export function createXpOverTimeChart(transactions, cohortInfo, xMonths) {
         yText.textContent = Math.round(value).toLocaleString();
         svg.appendChild(yText);
     }
-    // //Add 10 equally spaced dots along x-axis
-    // const xStart = margin.left;
-    // const xEnd = 600 - margin.right;
-    // const xInterval = (xEnd - xStart) / xMonths;  // Divide the axis into 10 intervals
 
-    // for (let i = 0; i <= 10; i++) {
-    //     const x = xStart + i * xInterval;
-    //     svg.appendChild(Path.createDot(x, 400 - margin.bottom, 3, '#333'));
-    // }
-    // //Create 10 X-axis labels
-    // for (let i = 0; i <= 10; i++) {
-    //     const date = new Date(minX.getTime() + (timeRange / 10) * i);
-    //     const x = margin.left + (width / 9) * i;
+    //Create 10 X-axis labels
+    for (let i = 0; i <= 6; i++) {
+        const date = new Date(minX.getTime() + (timeRange / 6) * i);
+        const x = margin.left + (width / 5) * i;
 
-    //     const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    //     text.setAttribute('x', x);
-    //     text.setAttribute('y', 400 - 10);
-    //     text.setAttribute('text-anchor', 'middle');
-    //     text.setAttribute('font-size', '10px');
-    //     text.textContent = date.toISOString().slice(0, 10);
-    //     svg.appendChild(text);
-    // }
-    // // Add 10 equally spaced dots along y-axis
-    // const yStart = margin.top;
-    // const yEnd = 400 - margin.bottom;
-    // const yInterval = (yEnd - yStart) / 10;  // Divide the axis into 10 intervals
+        svg.appendChild(Path.createDot(x, 400 - margin.bottom, 3, '#333'));
 
-    // for (let i = 0; i <= 10; i++) {
-    //     const y = yStart + i * yInterval;
-    //     svg.appendChild(createDot(margin.left, y, 3, '#333'));
-    // }
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', x);
+        text.setAttribute('y', 400 - 10);
+        text.setAttribute('text-anchor', 'middle');
+        text.setAttribute('font-size', '10px');
+        text.textContent = date.toISOString().slice(0, 10);
+        svg.appendChild(text);
+    }
     document.getElementById('xpOverTime').appendChild(svg);
 }
 
