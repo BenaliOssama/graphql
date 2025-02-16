@@ -64,6 +64,7 @@ export function createXpOverTimeChart(transactions, cohortInfo, xMonths) {
     document.getElementById('xpOverTime').appendChild(svg);
     // Update function
     function update() {
+        document.getElementById('monthsSelect').removeEventListener('change', update);
         // Remove the previous svg element if it exists
         const svgElement = document.getElementById('xpOverTime').querySelector('svg');
         if (svgElement) {
@@ -72,8 +73,8 @@ export function createXpOverTimeChart(transactions, cohortInfo, xMonths) {
 
         // Append the new svg based on the selected value
         const x = parseInt(monthsSelect.value);
-        const newSvg = createXpOverTimeChart(transactions, cohortInfo, x);
-        document.getElementById('xpOverTime').appendChild(newSvg);
+        createXpOverTimeChart(transactions, cohortInfo, x);
+        //document.getElementById('xpOverTime').appendChild(newSvg);
     }
 
     // Add event listener to the select element to update the chart
