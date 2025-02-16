@@ -135,7 +135,6 @@ class Display {
         basicInfoDiv.innerHTML = `
         <div id="basic-info">
             <h2 id="userName">${user.firstName} ${user.lastName}</h2>
-            <h3> Cohort: ${formattedDate}</h3>
         </div>`;
 
         // Add event listener to the name to toggle details
@@ -165,9 +164,11 @@ class Display {
     static displayAuditInfo(user) {
         document.getElementById('auditRatio').innerHTML = `
         <div id="audit_ratio">
-            <p>Audit Ratio: ${parseFloat(user.auditRatio).toFixed(1)}</p>
-            <p>Total Up: ${formatBytes(user.totalUp)}</p>
-            <p>Total Down: ${formatBytes(user.totalDown)}</p>
+            <div>Audit Ratio: ${parseFloat(user.auditRatio).toFixed(1)}</div>
+            <div id="upDown">
+            <div>Total Up: ${formatBytes(user.totalUp)}</div>
+            <div>Total Down: ${formatBytes(user.totalDown)}</div>
+            </div>
         </div>
     `;
     }
