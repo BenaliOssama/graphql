@@ -18,35 +18,30 @@ export function createXpOverTimeChart(transactions, cohortInfo, xMonths) {
     const path = Path.drawPath(dataPoints, margin)
     svg.appendChild(path);
 
+    const width = 600 - margin.left - margin.right;
+    const height = 400 - margin.top - margin.bottom;
 
-    // // In your chart code:
-    // const maxY = roundUpToNearestPowerOfTen(dataPoints[dataPoints.length - 1].cumulative);
-    // const minX = dataPoints[0].date;
-    // const maxX = dataPoints[dataPoints.length - 1].date;
-    // const timeRange = maxX - minX;
-    // // Create a dot function
-    // function createDot(x, y, radius = 3, color = '#333') {
-    //     const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    //     dot.setAttribute('cx', x);
-    //     dot.setAttribute('cy', y);
-    //     dot.setAttribute('r', radius);
-    //     dot.setAttribute('fill', color);
-    //     return dot;
-    // }
-    // // Create 10 Y-axis labels
-    // for (let i = 0; i <= 10; i++) {
-    //     const value = (maxY / 10) * i;
-    //     const y = 400 - margin.bottom - (value / maxY) * height;
+    // In your chart code:
+    const maxY = roundUpToNearestPowerOfTen(dataPoints[dataPoints.length - 1].cumulative);
+    const minX = dataPoints[0].date;
+    const maxX = dataPoints[dataPoints.length - 1].date;
+    const timeRange = maxX - minX;
 
-    //     const yText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    //     yText.setAttribute('x', margin.left - 10);
-    //     yText.setAttribute('y', y);
-    //     yText.setAttribute('text-anchor', 'end');
-    //     yText.setAttribute('dominant-baseline', 'middle');
-    //     yText.setAttribute('font-size', '10px');
-    //     yText.textContent = Math.round(value).toLocaleString();
-    //     svg.appendChild(yText);
-    // }
+    // Create 10 Y-axis labels
+    for (let i = 0; i <= 10; i++) {
+        const value = Math.pow(maxY / 10, 1) * i;
+        //const y = 400 - margin.bottom - (value / maxY) * height;
+        const y = 400 - margin.bottom - (Math.sqrt(value) / Math.sqrt(maxY)) * height;
+
+        const yText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        yText.setAttribute('x', margin.left - 10);
+        yText.setAttribute('y', y);
+        yText.setAttribute('text-anchor', 'end');
+        yText.setAttribute('dominant-baseline', 'middle');
+        yText.setAttribute('font-size', '10px');
+        yText.textContent = Math.round(value).toLocaleString();
+        svg.appendChild(yText);
+    }
     // //Add 10 equally spaced dots along x-axis
     // const xStart = margin.left;
     // const xEnd = 600 - margin.right;
@@ -54,7 +49,7 @@ export function createXpOverTimeChart(transactions, cohortInfo, xMonths) {
 
     // for (let i = 0; i <= 10; i++) {
     //     const x = xStart + i * xInterval;
-    //     svg.appendChild(createDot(x, 400 - margin.bottom, 3, '#333'));
+    //     svg.appendChild(Path.createDot(x, 400 - margin.bottom, 3, '#333'));
     // }
     // //Create 10 X-axis labels
     // for (let i = 0; i <= 10; i++) {
@@ -167,7 +162,7 @@ class Path {
                 ((point.date - dataPoints[0].date) / // time since the first date
                     (dataPoints[dataPoints.length - 1].date - dataPoints[0].date)) * width; // distance between the first and the last
             const y = 400 - margin.bottom -
-                (point.cumulative / dataPoints[dataPoints.length - 1].cumulative) * height;
+                Math.sqrt(point.cumulative / dataPoints[dataPoints.length - 1].cumulative) * height;
 
             if (i === 0) {
                 pathData = `M ${x} ${y}`;
@@ -181,5 +176,13 @@ class Path {
         path.setAttribute('stroke', '#4a90e2');
         path.setAttribute('stroke-width', '2');
         return path
+    }
+    static createDot(x, y, radius = 3, color = '#333') {
+        const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        dot.setAttribute('cx', x);
+        dot.setAttribute('cy', y);
+        dot.setAttribute('r', radius);
+        dot.setAttribute('fill', color);
+        return dot;
     }
 }
