@@ -1,7 +1,7 @@
 import { queries } from "./queries.js"
 import {authentication} from "./auth.js"
-import { createProjectsXpChart, createSpiderWebSkillsChart, createXpOverTimeChart } from "./graphs.js"
-
+import { createProjectsXpChart, createSpiderWebSkillsChart} from "./graphs.js"
+import { createXpOverTimeChart } from "./xpOverTime.js";
 
 export class ProfilePage {
     render() {
@@ -105,7 +105,8 @@ export class ProfilePage {
 
         function processXpData(transactions, cohortInfo) {
             // Process data for graphs
-            createXpOverTimeChart(transactions, cohortInfo);
+            const monthsAgo = 6 ; 
+            createXpOverTimeChart(transactions, cohortInfo, monthsAgo);
             createProjectsXpChart(transactions);
         }
 
