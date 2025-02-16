@@ -45,6 +45,12 @@ export class ProfilePage {
                     </div>
                     <div class="graph-container" id="xpOverTime">
                         <h3>Total XP</h3>
+                            <label for="monthsSelect">Choose months: </label>
+                            <select id="monthsSelect">
+                                <option value="6">6 months</option>
+                                <option value="3">3 months</option>
+                                <option value="1">1 month</option>
+                            </select>
                     </div>
                 </section>
             </div>

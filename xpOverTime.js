@@ -62,6 +62,23 @@ export function createXpOverTimeChart(transactions, cohortInfo, xMonths) {
         svg.appendChild(text);
     }
     document.getElementById('xpOverTime').appendChild(svg);
+    // Update function
+    function update() {
+        // Remove the previous svg element if it exists
+        const svgElement = document.getElementById('xpOverTime').querySelector('svg');
+        if (svgElement) {
+            svgElement.remove();
+        }
+
+        // Append the new svg based on the selected value
+        const x = parseInt(monthsSelect.value);
+        const newSvg = createXpOverTimeChart(transactions, cohortInfo, x);
+        document.getElementById('xpOverTime').appendChild(newSvg);
+    }
+
+    // Add event listener to the select element to update the chart
+    document.getElementById('monthsSelect').addEventListener('change', update);
+
 }
 
 
