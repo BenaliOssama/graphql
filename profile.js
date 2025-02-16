@@ -103,7 +103,6 @@ export class ProfilePage {
         }
 
 
-        //console.log('it is defined', skillRes.data.transaction)
         function processXpData(transactions, cohortInfo) {
             // Process data for graphs
             createXpOverTimeChart(transactions, cohortInfo);
@@ -167,7 +166,6 @@ class Display {
     }
 
     static displayTotalXp(data, lastProjectsRes) {
-        console.log(data.transaction_aggregate.aggregate.sum.amount);
         document.getElementById('totalXp').innerHTML = `
         <span class="large-number">${formatBytes(data.transaction_aggregate.aggregate.sum.amount)}</span>
     `;

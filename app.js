@@ -62,13 +62,6 @@ if (window.location.pathname.endsWith('profile.html')) {
             fetchGraphQL(queries.lastProjectsQuery)
         ]);
 
-        console.log(userRes.data);
-        console.log(totalXpRes.data);
-        console.log(individualXpRes.data);
-        console.log(currentLevelRes);
-        console.log(skillRes.data.transaction);
-        console.log(auditRes);
-        console.log(lastProjectsRes);
         displayUserInfo(userRes.data.user[0])
         processXpData(totalXpRes.data)
         createSpiderWebSkillsChart(skillRes.data.transaction);
@@ -90,7 +83,6 @@ if (window.location.pathname.endsWith('profile.html')) {
         `;
     }
 
-    //console.log('it is defined', skillRes.data.transaction)
     function processXpData(transactions) {
         // Process data for graphs
         createXpOverTimeChart(transactions);

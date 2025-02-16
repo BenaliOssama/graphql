@@ -11,26 +11,22 @@ export class Router {
     }
 
     addRoute(path, ComponentClass) {
-        console.log(`Adding route: ${path}`);
         this.routes[path] = ComponentClass; // Store component class
     }
 
     render(route) {
-        console.log(`befor Attempting to render: ${route}. check if the user is loggedin ? `);
         if (!authentication.isAuthenticated()) {
             if (route != "/login") {
                 this.navigate("/login")
                 return
             }
         } else {
-            console.log('this is not working')
             if (route == "/login") {
                 this.navigate("/")
                 return
             }
         }
 
-        console.log(`Attempting to render: ${route}`);
         const app = document.getElementById('app');
 
         // Unmount current component if it exists

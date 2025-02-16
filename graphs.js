@@ -232,7 +232,6 @@ export function createSpiderWebSkillsChart(unfilteredData) {
     // order data from largest to smallest
     let data = filterSkillsData(unfilteredData)
     if (data.length < 2) {
-        console.log("you don't have enough skills data to be displayed")
         throw error("you don't have enough skills data to be displayed")
     }
     // Create an instance of the SpiderWebChart , configuration of it
