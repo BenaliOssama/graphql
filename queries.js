@@ -12,7 +12,7 @@ export const queries = {
     }
   }`,
 
-  totalXpQuery: function(module){
+  totalXpQuery: function (module) {
     return `{
     transaction_aggregate(where: { 
       type: { _eq: "xp" }, 
@@ -29,16 +29,17 @@ export const queries = {
     }`
   },
 
-  individualXpQuery: ` {
+  individualXpQuery: function (module) {
+    return ` {
             transaction(where: {
                 type: { _eq: "xp" },
-                eventId: { _eq: 41 }
+                eventId: { _eq: ${module}}
             }, order_by: { createdAt: desc }) {
                 path
                 amount
                 createdAt
             }
-        }`,
+        }`},
   currentLevelQuery: `{
         transaction_aggregate(
             where:{
@@ -56,9 +57,10 @@ export const queries = {
                 amount
             }
         }`,
-  lastProjectsQuery: `{
+  lastProjectsQuery: function (max) {
+    return `{
           user {
-            transactions(limit: 3, where: {type: {_eq: "xp"}}, order_by: {createdAt: desc}) {
+            transactions(limit: ${max}, where: {type: {_eq: "xp"}}, order_by: {createdAt: desc}) {
               object {
                 name
               }
@@ -66,7 +68,8 @@ export const queries = {
               createdAt
             }
           }
-        }`,
+        }`
+  },
   auditQuery: `{
           user {
             audits_aggregate(where: {closureType: {_eq: succeeded}}) {

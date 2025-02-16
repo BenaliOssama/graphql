@@ -1,4 +1,5 @@
 import { queries } from "./queries.js"
+import {authentication} from "./auth.js"
 import { createProjectsXpChart, createSpiderWebSkillsChart, createXpOverTimeChart } from "./graphs.js"
 
 
@@ -51,81 +52,66 @@ export class ProfilePage {
     }
 
     mount() {
-        const jwt = localStorage.getItem('jwt');
-
-        if (!jwt) window.location.href = '/login';
+        if (!authentication.isAuthenticated()) {
+            authentication.redirectToLogin()
+            return
+        }
 
         document.getElementById('logoutBtn').addEventListener('click', () => {
             window.location.href = '/logout';
         });
 
-        // Fetch user data
-        async function fetchGraphQL(query) {
-            const response = await fetch('https://learn.zone01oujda.ma/api/graphql-engine/v1/graphql', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${jwt}`
-                },
-                body: JSON.stringify({ query })
-            });
-            return response.json();
-        }
-
         // Example query for user data
         async function loadProfile() {
-            const [userRes, userCohortRes, totalXpRes, individualXpRes, currentLevelRes, skillRes, auditRes, lastProjectsRes] = await Promise.all([
+            const [userRes, userCohortRes, currentLevelRes, skillRes, auditRes, lastProjectsRes] = await Promise.all([
                 fetchGraphQL(queries.userQuery),
                 fetchGraphQL(queries.userCohortQuery),
-                fetchGraphQL(queries.totalXpQuery(41)),
-                fetchGraphQL(queries.individualXpQuery),
                 fetchGraphQL(queries.currentLevelQuery),
                 fetchGraphQL(queries.skillQuery),
                 fetchGraphQL(queries.auditQuery),
-                fetchGraphQL(queries.lastProjectsQuery)
+                fetchGraphQL(queries.lastProjectsQuery(3))
             ]);
-            console.log(userRes.data)
-            console.log('cohort', userCohortRes.data)
-            console.log('total xp', totalXpRes.data)
-            console.log('incividual xp', individualXpRes.data);
-            console.log('audit Res', auditRes);
-            console.log('last projects', lastProjectsRes.data.user[0].transactions[0].amount);
-            console.log('last projects', lastProjectsRes.data.user[0].transactions[0].createdAt);
-            console.log('last projects', lastProjectsRes.data.user[0].transactions[0].object.name);
+
             // Assuming you have the GraphQL response data in `data`
             const filteredEvents = userCohortRes.data.user[0].events.filter(event =>
                 event.event.object.name === "Module" && event.event.object.type === "module"
             );
-
-            console.log('filterd cohort', filteredEvents[0].event.startAt);
             const date = new Date(filteredEvents[0].event.startAt);
             const cohortId = filteredEvents[0].event.id;
-            console.log('cohort id',cohortId)
+
 
             // Format as "YYYY-MM-DD"
             const formattedDate = date.toISOString().split('T')[0];
-            console.log('filtered date', formattedDate)
+
+            const [totalXpRes, individualXpRes] = await Promise.all([
+                fetchGraphQL(queries.totalXpQuery(cohortId)),
+                fetchGraphQL(queries.individualXpQuery(cohortId)),
+            ]);
+
+            let cohortInfo = {
+                startAt: filteredEvents[0].event.startAt,
+                id : cohortId
+            }
 
             Display.displayUserInfo(userRes.data.user[0], formattedDate);
             Display.displayAuditInfo(userRes.data.user[0]);
             Display.displayTotalXp(totalXpRes.data, lastProjectsRes.data)
             Display.displayLevel(currentLevelRes.data)
 
-            processXpData(individualXpRes.data.transaction)
+            processXpData(individualXpRes.data.transaction, cohortInfo)
             createSpiderWebSkillsChart(skillRes.data.transaction);
         }
 
 
         //console.log('it is defined', skillRes.data.transaction)
-        function processXpData(transactions) {
+        function processXpData(transactions, cohortInfo) {
             // Process data for graphs
-            createXpOverTimeChart(transactions);
+            createXpOverTimeChart(transactions, cohortInfo);
             createProjectsXpChart(transactions);
         }
 
         // window.onload = loadProfile;
         loadProfile();
-        console.log('done with logic of routing page')
     }
 
     unmount() {
@@ -233,4 +219,18 @@ function formatBytes(bytes) {
     const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
     const i = Math.floor(Math.log(bytes) / Math.log(1024));
     return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
+}
+
+// Fetch user data
+async function fetchGraphQL(query) {
+    const jwt = authentication.getJwt()
+    const response = await fetch('https://learn.zone01oujda.ma/api/graphql-engine/v1/graphql', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${jwt}`
+        },
+        body: JSON.stringify({ query })
+    });
+    return response.json();
 }

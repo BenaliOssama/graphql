@@ -4,10 +4,8 @@ export class Router {
     constructor() {
         this.routes = {};
         this.currentComponent = null; // Track active component instance
-        console.log('Router initialized');
 
         // Bind events
-
         window.addEventListener('popstate', this.handlePopstate.bind(this));
         window.addEventListener('load', this.handleInitialLoad.bind(this));
     }
@@ -65,7 +63,6 @@ export class Router {
 
     handlePopstate(event) {
         event.preventDefault();
-        console.log('Popstate triggered');
         const currentRoute = window.location.pathname;
         this.render(currentRoute);
     }
@@ -83,7 +80,6 @@ export class Router {
                 return
             }
         }
-        console.log('Page loaded');
         const initialRoute = window.location.pathname;
         this.navigate(initialRoute);
     }

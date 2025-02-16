@@ -1,7 +1,7 @@
 import { SpiderWebChart } from "./spiderweb.js";
 
 /*______________________________xp over time____________________________*/
-export function createXpOverTimeChart(transactions) {
+export function createXpOverTimeChart(transactions, cohortInfo) {
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     // width="100%" height="100%": Ensures the SVG takes up the available space.
     svg.setAttribute('width', '100%');
@@ -10,7 +10,6 @@ export function createXpOverTimeChart(transactions) {
     svg.setAttribute('viewBox', `0 0 ${600} ${400}`);
     // preserveAspectRatio="xMidYMid meet": Maintains aspect ratio while centering the content.
     svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-
     // Process and sort transactions
     const processed = transactions
         .map(t => ({ ...t, createdAt: new Date(t.createdAt) }))
