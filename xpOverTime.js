@@ -48,9 +48,9 @@ export function createXpOverTimeChart(transactions, cohortInfo, xMonths) {
     }
 
     //Create 10 X-axis labels
-    for (let i = 0; i <= 6; i++) {
-        const date = new Date(minX.getTime() + (timeRange / 6) * i);
-        const x = margin.left + (width / 5) * i;
+    for (let i = 0; i <= xMonths; i++) {
+        const date = new Date(minX.getTime() + (timeRange / xMonths) * i);
+        const x = margin.left + (width / xMonths -1) * i;
 
         svg.appendChild(Path.createDot(x, 400 - margin.bottom, 3, '#333'));
 
