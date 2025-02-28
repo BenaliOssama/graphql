@@ -170,8 +170,8 @@ class Display {
         <div id="audit_ratio">
             <div>Audit Ratio: ${parseFloat(user.auditRatio).toFixed(1)}</div>
             <div id="upDown">
-            <div>Total Up: ${formatBytes(user.totalUp)}</div>
-            <div>Total Down: ${formatBytes(user.totalDown)}</div>
+            <div id="totol_up">Total Up: ${formatBytes(user.totalUp)}</div>
+            <div id="total_down">Total Down: ${formatBytes(user.totalDown)}</div>
             </div>
         </div>
     `;

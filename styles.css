@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -26,6 +30,7 @@ body {
     border-radius: 8px;
     margin: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center !important;
 }
 
 .graph-container {
@@ -188,11 +193,14 @@ input[type="password"] {
     font-size: 14px;
     color: #333;
     width: fit-content;
+    max-width: 100%;
     font-weight: bold;
 }
 
-#audit_ratio>div:first-child {
+#audit_ratio > div:first-child {
     color: #b58900;
+    font-size: x-large;
+    padding: 20px;
     /* Darker yellow for contrast */
 }
 
@@ -200,6 +208,11 @@ input[type="password"] {
     display: flex;
     gap: 10px;
     font-weight: normal;
+@media(max-width: 1200px) {
+        width: 100%;
+        display: block !important;
+        text-align: center;
+    }
 }
 
 #upDown div {
@@ -210,12 +223,36 @@ input[type="password"] {
 }
 
 #upDown div:first-child {
-    background: #28a745;
+    font-size: 16px;
+    background: #4CAF50;
+    width: 200px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    @media(max-width: 1200px) {
+        margin: 5px auto;
+        width: 100% !important;
+        /* display: block !important; */
+    }
     /* Green for Total Up */
 }
 
 #upDown div:last-child {
-    background: #dc3545;
+    font-size: 16px;
+    font-weight: 600;
+    background: #E91E63;
+    width: 200px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @media(max-width: 1200px) {
+        width: 100% !important;
+        margin: 5px auto;
+        /* display: block !important; */
+    }
     /* Red for Total Down */
 }
 
@@ -270,6 +307,12 @@ select:focus {
     color: #333;
 }
 
+#auditRatio {
+    margin: 30px auto;
+    width: max-content;
+}
+
+
 /*_____________________________________________________*/
 @media screen and (min-width: 48rem) {
     .stats {
@@ -279,6 +322,10 @@ select:focus {
         margin-left: auto;
         margin-right: auto;
         width: 100%;
+    }
+    #currentLevel {
+        display: block;
+        margin: 40px;
     }
 
     .first_two {
@@ -382,4 +429,17 @@ select:focus {
         font-size: 1rem;
     }
 
+    #auditRatio {
+        background: white;
+        padding: 20px;
+        border-radius: 5px;
+        font-size: 14px;
+        color: #333;
+        font-weight: bold;
+    }
+
+    #audit_ratio {
+        /* background: white;
+        font-size: 30px; */
+    }
 }
