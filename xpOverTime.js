@@ -28,7 +28,7 @@ export function createXpOverTimeChart(transactions, cohortInfo, xMonths) {
 
     const timeRange = maxX - minX;
 
-    const path = Path.drawPath(dataPoints, margin, minX, maxX)
+    const path = Path.drawPath(dataPoints, margin, minX, maxX, maxY)
     svg.appendChild(path);
 
     // Create 10 Y-axis labels
@@ -157,7 +157,7 @@ class Path {
         svg.appendChild(yAxis);
         return svg
     }
-    static drawPath(dataPoints, margin, from, to) {
+    static drawPath(dataPoints, margin, from, to, maxY) {
         const width = 600 - margin.left - margin.right;
         const height = 400 - margin.top - margin.bottom;
 
@@ -176,7 +176,7 @@ class Path {
                 ((point.date - from) / // time since the first date
                     (to - from) * width); // distance between the first and the last
             const y = 400 - margin.bottom -
-                Math.sqrt(point.cumulative / dataPoints[dataPoints.length - 1].cumulative) * height;
+                Math.sqrt(point.cumulative / maxY) * height;
 
             pathData += ` H ${x} V ${y}`;
         });
