@@ -436,10 +436,6 @@ select:focus {
         font-size: 14px;
         color: #333;
         font-weight: bold;
-    }
-
-    #audit_ratio {
-        /* background: white;
-        font-size: 30px; */
+        max-width: 100%;
     }
 }
