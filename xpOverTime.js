@@ -94,10 +94,17 @@ function getLastXMonthsTransactions(transactions, months) {
     }
     cutoffDate.setMonth(now.getMonth() - months); // Move back X months
 
-    return transactions
+    let sorted = transactions
         .map(t => ({ ...t, createdAt: new Date(t.createdAt) })) // Ensure Date objects
         .sort((a, b) => a.createdAt - b.createdAt) // Sort by date
+    let filtered = sorted
         .filter(t => t.createdAt >= cutoffDate); // Keep only recent ones
+    console.log(Array.isArray(filtered))
+    if (sorted.length > filtered.length) {
+        filtered.push(sorted[sorted.length - 1 - filtered.length])
+    }
+    console.log(Array.isArray(filtered))
+    return filtered
 }
 
 
@@ -166,23 +173,22 @@ class Path {
 
         // Create line path
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        let pathData = '';
+        const start = dataPoints.pop();
+        const x = margin.left ;
+        const y = 400 - margin.bottom -
+            Math.sqrt(height);
+        let pathData = `M ${x} ${y}`;
+
         dataPoints.forEach((point, i) => {
             const x = margin.left +
-                ((point.date - dataPoints[0].date) / // time since the first date
-                    (dataPoints[dataPoints.length - 1].date - dataPoints[0].date)) * width; // distance between the first and the last
+                ((point.date - start.date) / // time since the first date
+                    (dataPoints[dataPoints.length - 1].date - start.date)) * width; // distance between the first and the last
             const y = 400 - margin.bottom -
                 Math.sqrt(point.cumulative / dataPoints[dataPoints.length - 1].cumulative) * height;
 
-            if (i === 0) {
-                pathData = `M ${x} ${y}`;
-                this.PrevX = x;
-                this.PrevY = y;
-            } else {
-                pathData += ` H ${x} V ${y}`;
-                this.prevX = x;
-                this.prevY = y;
-            }
+            pathData += ` H ${x} V ${y}`;
+            this.prevX = x;
+            this.prevY = y;
         });
 
         path.setAttribute('d', pathData);
