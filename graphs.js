@@ -1,4 +1,5 @@
 import { SpiderWebChart } from "./spiderweb.js";
+import { formatBytes } from "./utils.js";
 
 
 /*______________________________projects xp____________________________*/
@@ -85,7 +86,7 @@ export function createProjectsXpChart(transactions) {
         amountText.setAttribute('y', y + barHeight / 2);
         amountText.setAttribute('dominant-baseline', 'middle');
         amountText.setAttribute('font-size', '1em');
-        amountText.textContent = amount.toLocaleString();
+        amountText.textContent = formatBytes(amount, 0);
         svg.appendChild(amountText);
     });
 
