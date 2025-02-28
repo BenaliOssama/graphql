@@ -95,17 +95,10 @@ function getLastXMonthsTransactions(transactions, months) {
     }
     cutoffDate.setMonth(now.getMonth() - months); // Move back X months
 
-    let sorted = transactions
+    return transactions
         .map(t => ({ ...t, createdAt: new Date(t.createdAt) })) // Ensure Date objects
         .sort((a, b) => a.createdAt - b.createdAt) // Sort by date
-    let filtered = sorted
         .filter(t => t.createdAt >= cutoffDate); // Keep only recent ones
-    console.log(Array.isArray(filtered))
-    if (sorted.length > filtered.length) {
-        filtered.push(sorted[sorted.length - 1 - filtered.length])
-    }
-    console.log(Array.isArray(filtered))
-    return filtered
 }
 
 
@@ -141,10 +134,6 @@ function roundUpToNearestPowerOfTen(num) {
 
 
 class Path {
-    constructor() {
-        this.prevX = 0;
-        this.prevY = 0;
-    }
     static makePathBody(margin) {
         const svg = createSvg('svg', { width: '100%', height: '100%', viewBox: `0 0 ${600} ${400}`, preserveAspectRation: 'xMidYMid meet' });
         // Create the xAxis
@@ -168,15 +157,18 @@ class Path {
         svg.appendChild(yAxis);
         return svg
     }
-    static drawPath(dataPoints, margin, from , to) {
+    static drawPath(dataPoints, margin, from, to) {
         const width = 600 - margin.left - margin.right;
         const height = 400 - margin.top - margin.bottom;
 
         // Create line path
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        console.log('dataPoints befor pop', dataPoints[dataPoints.length - 1])
         const start = dataPoints.pop();
-        const x = margin.left ;
-        const y = 400 - margin.bottom - Math.sqrt(height);
+        console.log('dataPoints after pop', dataPoints[dataPoints.length - 1])
+        const x = margin.left;
+        const y = 400 - margin.bottom 
+
         let pathData = `M ${x} ${y}`;
 
         dataPoints.forEach((point, i) => {
@@ -187,8 +179,6 @@ class Path {
                 Math.sqrt(point.cumulative / dataPoints[dataPoints.length - 1].cumulative) * height;
 
             pathData += ` H ${x} V ${y}`;
-            this.prevX = x;
-            this.prevY = y;
         });
 
         path.setAttribute('d', pathData);
