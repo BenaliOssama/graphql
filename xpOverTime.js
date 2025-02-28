@@ -133,6 +133,10 @@ function roundUpToNearestPowerOfTen(num) {
 
 
 class Path {
+    constructor() {
+        this.prevX = 0;
+        this.prevY = 0;
+    }
     static makePathBody(margin) {
         const svg = createSvg('svg', { width: '100%', height: '100%', viewBox: `0 0 ${600} ${400}`, preserveAspectRation: 'xMidYMid meet' });
         // Create the xAxis
@@ -172,8 +176,12 @@ class Path {
 
             if (i === 0) {
                 pathData = `M ${x} ${y}`;
+                this.PrevX = x;
+                this.PrevY = y;
             } else {
-                pathData += ` L ${x} ${y}`;
+                pathData += ` H ${x} V ${y}`;
+                this.prevX = x;
+                this.prevY = y;
             }
         });
 
