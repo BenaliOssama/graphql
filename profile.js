@@ -26,7 +26,7 @@ export class ProfilePage {
                     <div class="stat-box-wrapper">
                         <div class="stat-box">
                             <h3>Audit Ratio</h3>
-                            <p id="auditRatio">0</p>
+                            <div id="auditRatio">0</div>
                         </div>
                         <div class="stat-box">
                             <h3>Level</h3>
@@ -36,12 +36,14 @@ export class ProfilePage {
                 </section>
 
                 <section class="graphs">
-                    <div class="graph-container" id="projectsXp">
-                        <h3>Total XP</h3>
-                    </div>
-                    <div class="spider-web">
-                        <h3>Skill Representation</h3>
-                        <div id="chart-container"></div>
+                    <div class="first_two">
+                        <div class="graph-container" id="projectsXp">
+                            <h3>Total XP</h3>
+                        </div>
+                        <div class="spider-web">
+                            <h3>Skill Representation</h3>
+                            <div id="chart-container"></div>
+                        </div>
                     </div>
                     <div class="graph-container" id="xpOverTime">
                         <h3>XP over Time</h3>
