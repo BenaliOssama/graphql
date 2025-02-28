@@ -195,18 +195,18 @@ class Path {
         path.setAttribute('stroke', '#4a90e2');
         path.setAttribute('stroke-width', '2');
         group.appendChild(path)
-        if (lastX !== undefined && lastY !== undefined) {
-            // Create text element
-            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-            text.setAttribute('x', lastX ); // Offset to avoid overlap
-            text.setAttribute('y', lastY - 5);
-            text.setAttribute('font-size', '12px');
-            text.setAttribute('fill', '#000');
-            text.textContent = formatBytes(lastValue); // Set text to the last point's value
+        // if (lastX !== undefined && lastY !== undefined) {
+        //     // Create text element
+        //     const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        //     text.setAttribute('x', lastX); // Offset to avoid overlap
+        //     text.setAttribute('y', lastY - 5);
+        //     text.setAttribute('font-size', '12px');
+        //     text.setAttribute('fill', '#000');
+        //     text.textContent = formatBytes(lastValue, 0, true); // Set text to the last point's value
 
-            // Append text to group
-            group.appendChild(text);
-        }
+        //     // Append text to group
+        //     group.appendChild(text);
+        // }
         return group
     }
     static createDot(x, y, radius = 3, color = '#333') {

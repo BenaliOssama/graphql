@@ -2,6 +2,7 @@ import { queries } from "./queries.js"
 import {authentication} from "./auth.js"
 import { createProjectsXpChart, createSpiderWebSkillsChart} from "./graphs.js"
 import { createXpOverTimeChart } from "./xpOverTime.js";
+import { formatBytes } from "./utils.js";
 
 export class ProfilePage {
     render() {
@@ -179,7 +180,7 @@ class Display {
 
     static displayTotalXp(data, lastProjectsRes) {
         document.getElementById('totalXp').innerHTML = `
-        <span class="large-number">${formatBytes(data.transaction_aggregate.aggregate.sum.amount)}</span>
+        <span class="large-number">${formatBytes(data.transaction_aggregate.aggregate.sum.amount, 0)}</span>
     `;
         // Display Last Project details
         const projects = lastProjectsRes.user[0].transactions;
@@ -195,7 +196,7 @@ class Display {
             // Set the innerHTML with the formatted content
             p.innerHTML = `
             <div class="project-card">
-                <p>${project.object.name}: ${formatBytes(project.amount)}: ${formattedDate}</p>
+                <p>${project.object.name}: ${formatBytes(project.amount, 0)}: ${formattedDate}</p>
             </div>
             `;
 
@@ -224,12 +225,6 @@ class Display {
     }
 }
 
-function formatBytes(bytes) {
-    if (bytes === 0) return '0 B';
-    const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(1024));
-    return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
-}
 
 // Fetch user data
 async function fetchGraphQL(query) {

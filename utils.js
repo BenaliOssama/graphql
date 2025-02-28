@@ -9,9 +9,12 @@ export function createSvg(type, setAttributes) {
     return shape;
 }
 
-export function formatBytes(bytes) {
+export function formatBytes(bytes, fix = 1, accurate = false) {
     if (bytes === 0) return '0 B';
     const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
     const i = Math.floor(Math.log(bytes) / Math.log(1024));
-    return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
+    if (!accurate) {
+        return (bytes / Math.pow(1000, i)).toFixed(fix) + ' ' + sizes[i];
+    }
+    return (bytes / Math.pow(1024, i)).toFixed(fix) + ' ' + sizes[i];
 }
