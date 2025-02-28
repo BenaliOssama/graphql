@@ -1,4 +1,5 @@
 import { createSvg } from "./utils.js"
+import { formatBytes } from "./utils.js";
 
 /*______________________________xp over time____________________________*/
 export function createXpOverTimeChart(transactions, cohortInfo, xMonths) {
@@ -50,7 +51,7 @@ export function createXpOverTimeChart(transactions, cohortInfo, xMonths) {
     //Create 10 X-axis labels
     for (let i = 0; i <= xMonths; i++) {
         const date = new Date(minX.getTime() + (timeRange / xMonths) * i);
-        const x = margin.left + (width / xMonths -1) * i;
+        const x = margin.left + (width / xMonths - 1) * i;
 
         svg.appendChild(Path.createDot(x, 400 - margin.bottom, 3, '#333'));
 
@@ -161,15 +162,19 @@ class Path {
         const width = 600 - margin.left - margin.right;
         const height = 400 - margin.top - margin.bottom;
 
+
+        const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
         // Create line path
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        console.log('dataPoints befor pop', dataPoints[dataPoints.length - 1])
-        const start = dataPoints.pop();
-        console.log('dataPoints after pop', dataPoints[dataPoints.length - 1])
+
         const x = margin.left;
-        const y = 400 - margin.bottom 
+        const y = 400 - margin.bottom
 
         let pathData = `M ${x} ${y}`;
+
+        let lastX = 0;
+        let lastY = 0;
+        let lastValue = 0;
 
         dataPoints.forEach((point, i) => {
             const x = margin.left +
@@ -177,15 +182,32 @@ class Path {
                     (to - from) * width); // distance between the first and the last
             const y = 400 - margin.bottom -
                 Math.sqrt(point.cumulative / maxY) * height;
-
             pathData += ` H ${x} V ${y}`;
+            if (i === dataPoints.length - 1) {
+                lastX = x;
+                lastY = y;
+                lastValue = point.cumulative;
+            }
         });
 
         path.setAttribute('d', pathData);
         path.setAttribute('fill', 'none');
         path.setAttribute('stroke', '#4a90e2');
         path.setAttribute('stroke-width', '2');
-        return path
+        group.appendChild(path)
+        if (lastX !== undefined && lastY !== undefined) {
+            // Create text element
+            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            text.setAttribute('x', lastX ); // Offset to avoid overlap
+            text.setAttribute('y', lastY - 5);
+            text.setAttribute('font-size', '12px');
+            text.setAttribute('fill', '#000');
+            text.textContent = formatBytes(lastValue); // Set text to the last point's value
+
+            // Append text to group
+            group.appendChild(text);
+        }
+        return group
     }
     static createDot(x, y, radius = 3, color = '#333') {
         const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
