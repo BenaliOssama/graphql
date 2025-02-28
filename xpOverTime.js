@@ -15,8 +15,6 @@ export function createXpOverTimeChart(transactions, cohortInfo, xMonths) {
 
     console.log('dataPoints', dataPoints)
 
-    const path = Path.drawPath(dataPoints, margin)
-    svg.appendChild(path);
 
     const width = 600 - margin.left - margin.right;
     const height = 400 - margin.top - margin.bottom;
@@ -29,6 +27,9 @@ export function createXpOverTimeChart(transactions, cohortInfo, xMonths) {
     minX.setMonth(maxX.getMonth() - xMonths); // Subtract x months from maxX to get minX
 
     const timeRange = maxX - minX;
+
+    const path = Path.drawPath(dataPoints, margin, minX, maxX)
+    svg.appendChild(path);
 
     // Create 10 Y-axis labels
     for (let i = 0; i <= 10; i++) {
@@ -167,7 +168,7 @@ class Path {
         svg.appendChild(yAxis);
         return svg
     }
-    static drawPath(dataPoints, margin) {
+    static drawPath(dataPoints, margin, from , to) {
         const width = 600 - margin.left - margin.right;
         const height = 400 - margin.top - margin.bottom;
 
@@ -175,14 +176,13 @@ class Path {
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         const start = dataPoints.pop();
         const x = margin.left ;
-        const y = 400 - margin.bottom -
-            Math.sqrt(height);
+        const y = 400 - margin.bottom - Math.sqrt(height);
         let pathData = `M ${x} ${y}`;
 
         dataPoints.forEach((point, i) => {
             const x = margin.left +
-                ((point.date - start.date) / // time since the first date
-                    (dataPoints[dataPoints.length - 1].date - start.date)) * width; // distance between the first and the last
+                ((point.date - from) / // time since the first date
+                    (to - from) * width); // distance between the first and the last
             const y = 400 - margin.bottom -
                 Math.sqrt(point.cumulative / dataPoints[dataPoints.length - 1].cumulative) * height;
 
