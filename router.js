@@ -13,8 +13,7 @@ export class Router {
     addRoute(path, ComponentClass) {
         this.routes[path] = ComponentClass; // Store component class
     }
-
-    render(route) {
+    authGaurd(route) {
         if (!authentication.isAuthenticated()) {
             if (route != "/login") {
                 this.navigate("/login")
@@ -26,6 +25,9 @@ export class Router {
                 return
             }
         }
+    }
+    render(route) {
+        this.authGaurd(route)
 
         const app = document.getElementById('app');
 
@@ -65,17 +67,6 @@ export class Router {
 
     handleInitialLoad(event) {
         event.preventDefault();
-        if (window.location.href != "/login") {
-            if (!authentication.isAuthenticated()) {
-                this.navigate('/login')
-                return
-            }
-        } else {
-            if (authentication.isAuthenticated) {
-                this.navigate('/')
-                return
-            }
-        }
         const initialRoute = window.location.pathname;
         this.navigate(initialRoute);
     }
