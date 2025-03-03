@@ -2,7 +2,7 @@ import { queries } from "./queries.js"
 import {authentication} from "./auth.js"
 import { createProjectsXpChart, createSpiderWebSkillsChart} from "./graphs.js"
 import { createXpOverTimeChart } from "./xpOverTime.js";
-import { formatBytes } from "./utils.js";
+import { formatBytes, navigator } from "./utils.js";
 
 export class ProfilePage {
     render() {
@@ -69,7 +69,8 @@ export class ProfilePage {
         }
 
         document.getElementById('logoutBtn').addEventListener('click', () => {
-            window.location.href = '/logout';
+            navigator('/logout')
+            // window.location.href = '/logout';
         });
 
         // Example query for user data

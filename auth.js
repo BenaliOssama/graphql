@@ -1,3 +1,5 @@
+import {navigator} from "./utils.js"
+
 export class authentication {
     static isAuthenticated() {
         // undefined --> true --> false 
@@ -12,6 +14,7 @@ export class authentication {
         this.redirectToLogin()
     }
     static redirectToLogin() {
-        window.location.href = '/login';
+        navigator('/login')
+        // window.location.href = '/login';
     }
 }

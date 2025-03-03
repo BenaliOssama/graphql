@@ -1,4 +1,5 @@
 import { authentication } from "./auth.js"
+import { navigator } from "./utils.js";
 
 export class Router {
     constructor() {
@@ -16,12 +17,12 @@ export class Router {
     authGaurd(route) {
         if (!authentication.isAuthenticated()) {
             if (route != "/login") {
-                this.navigate("/login")
+                navigator('/login');
                 return
             }
         } else {
             if (route == "/login") {
-                this.navigate("/")
+                navigator('/');
                 return
             }
         }
@@ -54,20 +55,17 @@ export class Router {
         }
     }
 
-    navigate(route) {
-        window.history.pushState({}, '', route);
-        this.render(route);
-    }
 
     handlePopstate(event) {
         event.preventDefault();
         const currentRoute = window.location.pathname;
+        //navigator(currentRoute)
         this.render(currentRoute);
     }
 
     handleInitialLoad(event) {
         event.preventDefault();
         const initialRoute = window.location.pathname;
-        this.navigate(initialRoute);
+        navigator(initialRoute);
     }
 }

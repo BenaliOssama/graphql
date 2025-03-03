@@ -18,3 +18,8 @@ export function formatBytes(bytes, fix = 1, accurate = false) {
     }
     return (bytes / Math.pow(1024, i)).toFixed(fix) + ' ' + sizes[i];
 }
+
+export function navigator(route) {
+    history.replaceState(null, null, route);
+    window.dispatchEvent(new PopStateEvent('popstate'));
+}
