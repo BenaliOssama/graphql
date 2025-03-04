@@ -14,11 +14,11 @@ export const queries = {
 
   totalXpQuery: function (module) {
     return `{
-    transaction_aggregate(where: { 
-      type: { _eq: "xp" }, 
-      eventId: { _eq: ${module}}
-      #eventId: { _nin: [11, 67] }
-      #eventId: { _in: [41, 11] }
+      transaction_aggregate(where: { 
+        type: { _eq: "xp" }, 
+        eventId: { _eq: ${module}}
+        #eventId: { _nin: [11, 67] }
+        #eventId: { _in: [41, 11] }
       }) {
         aggregate {
           sum {
