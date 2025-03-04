@@ -110,7 +110,8 @@ export class ProfilePage {
             Display.displayLevel(currentLevelRes.data)
 
             processXpData(individualXpRes.data.transaction, cohortInfo)
-            createSpiderWebSkillsChart(skillRes.data.transaction);
+            const maxSkills = 6 ; 
+            createSpiderWebSkillsChart(skillRes.data.transaction, maxSkills);
         }
 
 
