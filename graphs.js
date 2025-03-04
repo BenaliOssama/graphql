@@ -28,8 +28,15 @@ export function createProjectsXpChart(transactions) {
         top: 30,
         bottom: 30
     };
+    // // Measure longest project name
+    // const tempText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    // tempText.textContent = projectEntries.reduce((a, [p]) =>
+    //     p.split('/').pop().length > a.length ? p.split('/').pop() : a, ''
+    // );
+    // const textWidth = tempText.getBBox().width;
 
-
+    // // Adjust left margin based on longest text
+    // margin.left = Math.min(Math.max(textWidth + 20, 180), 300);
     // Calculate bar dimensions
     const barHeight = 28;
     const spacing = 12;
@@ -78,10 +85,10 @@ export function createProjectsXpChart(transactions) {
     container.appendChild(svg);
 }
 /*______________________________spider web chart____________________________*/
-export function createSpiderWebSkillsChart(unfilteredData) {
+export function createSpiderWebSkillsChart(unfilteredData, amount = 6) {
     // filter data removing dublicates and choosing the top skill
     // order data from largest to smallest
-    let data = filterSkillsData(unfilteredData)
+    let data = filterSkillsData(unfilteredData, amount)
     if (data.length < 2) {
         throw error("you don't have enough skills data to be displayed")
     }
@@ -98,10 +105,10 @@ export function createSpiderWebSkillsChart(unfilteredData) {
 }
 
 
-function filterSkillsData(rawData) {
+function filterSkillsData(rawData, amount = 6) {
     let res = {};
     // skill --> object { type = "string", amount = "int" }
-    for (let skill of rawData) {
+    for (let skill of rawData) { // take the highest skill because they are replicated
         if (!res[skill.type] || res[skill.type].amount < skill.amount) {
             res[skill.type] = skill.amount;
         }
@@ -111,8 +118,8 @@ function filterSkillsData(rawData) {
         result.push({ label: key, value: value })
     }
     result.sort((a, b) => b.value - a.value)
-    if (result.length > 6) {
-        result = result.slice(0, 6)
+    if (result.length > amount) {
+        result = result.slice(0, amount)
     }
     return result
 }
