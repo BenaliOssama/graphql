@@ -6,9 +6,7 @@ import { formatBytes } from "./utils.js";
 export function createProjectsXpChart(transactions) {
     const container = document.getElementById('projectsXp');
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-
     // Set responsive attributes
-    svg.setAttribute('viewBox', `0 0 600 400`);
     svg.setAttribute('preserveAspectRatio', 'xMinYMin meet');
     svg.style.width = '100%';
     svg.style.height = 'auto';
@@ -31,19 +29,6 @@ export function createProjectsXpChart(transactions) {
         bottom: 30
     };
 
-    // Measure longest project name
-    const tempSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    const tempText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    tempText.textContent = projectEntries.reduce((a, [p]) =>
-        p.split('/').pop().length > a.length ? p.split('/').pop() : a, ''
-    );
-    tempSvg.appendChild(tempText);
-    document.body.appendChild(tempSvg);
-    const textWidth = tempText.getBBox().width;
-    document.body.removeChild(tempSvg);
-
-    // Adjust left margin based on longest text
-    margin.left = Math.min(Math.max(textWidth + 20, 180), 300);
 
     // Calculate bar dimensions
     const barHeight = 28;
