@@ -74,12 +74,12 @@ export class ProfilePage {
 
         // Example query for user data
         async function loadProfile() {
-            const [userRes, userCohortRes, currentLevelRes, skillRes, auditRes, lastProjectsRes] = await Promise.all([
+            const [userRes, userCohortRes, currentLevelRes, skillRes, /*auditRes,*/ lastProjectsRes] = await Promise.all([
                 fetchGraphQL(queries.userQuery),
                 fetchGraphQL(queries.userCohortQuery),
                 fetchGraphQL(queries.currentLevelQuery),
                 fetchGraphQL(queries.skillQuery),
-                fetchGraphQL(queries.auditQuery),
+                // fetchGraphQL(queries.auditQuery),
                 fetchGraphQL(queries.lastProjectsQuery(3))
             ]);
 

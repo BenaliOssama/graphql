@@ -57,12 +57,12 @@ export const queries = {
 
   skillQuery: `{
     transaction(
-      where: { type: { _like: "skill%" } }
+      where: { type: { _like: "skill%" } } 
       order_by: { amount: desc }) {
       type
       amount
     }
-  }`,
+  }`, // like for regex like, % anything that starts with the word skill ?
   lastProjectsQuery: function (max) {
     return `{
       user {
@@ -76,20 +76,20 @@ export const queries = {
       }
     }`
   },
-  auditQuery: `{
-    user {
-      audits_aggregate(where: {closureType: {_eq: succeeded}}) {
-        aggregate {
-          count
-        }
-      }
-      failed_audits: audits_aggregate(where: {closureType: {_eq: failed}}) {
-        aggregate {
-          count
-        }
-      }
-    }
-  }`,
+  // auditQuery: `{
+  //   user {
+  //     audits_aggregate(where: {closureType: {_eq: succeeded}}) {
+  //       aggregate {
+  //         count
+  //       }
+  //     }
+  //     failed_audits: audits_aggregate(where: {closureType: {_eq: failed}}) {
+  //       aggregate {
+  //         count
+  //       }
+  //     }
+  //   }
+  // }`,
   userCohortQuery: `{
     user {
       events{
