@@ -59,43 +59,43 @@ export const queries = {
         }`,
   lastProjectsQuery: function (max) {
     return `{
-          user {
-            transactions(limit: ${max}, where: {type: {_eq: "xp"}}, order_by: {createdAt: desc}) {
-              object {
-                name
-              }
-              amount
-              createdAt
-            }
+      user {
+        transactions(limit: ${max}, where: {type: {_eq: "xp"}}, order_by: {createdAt: desc}) {
+          object {
+            name
           }
-        }`
+          amount
+          createdAt
+        }
+      }
+    }`
   },
   auditQuery: `{
-          user {
-            audits_aggregate(where: {closureType: {_eq: succeeded}}) {
-              aggregate {
-                count
-              }
-            }
-            failed_audits: audits_aggregate(where: {closureType: {_eq: failed}}) {
-              aggregate {
-                count
-              }
-            }
-          }
-          }`,
-  userCohortQuery: `{
-  user {
-	events{
-      event {
-        object {
-          name 
-          type
+    user {
+      audits_aggregate(where: {closureType: {_eq: succeeded}}) {
+        aggregate {
+          count
         }
-        startAt
-        id
+      }
+      failed_audits: audits_aggregate(where: {closureType: {_eq: failed}}) {
+        aggregate {
+          count
+        }
       }
     }
-  }
-}`
+  }`,
+  userCohortQuery: `{
+    user {
+      events{
+        event {
+          object {
+            name 
+            type
+          }
+          startAt
+          id
+        }
+      }
+    }
+  }`
 }

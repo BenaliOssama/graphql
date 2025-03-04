@@ -11,7 +11,7 @@ export class SpiderWebChart {
                 ...options
             };
         this.svg = null;
-        this.radius = options.radius || Math.min(this.options.width, this.options.height) / 2;
+        this.radius = radius || Math.min(this.options.width, this.options.height) / 2;
         this.angleSlice = (Math.PI * 2) / this.data.length;
     }
 

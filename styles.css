@@ -38,6 +38,7 @@ body {
     padding: 20px;
     margin: 20px 0;
     border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .spider-web {
@@ -45,6 +46,7 @@ body {
     padding: 20px;
     margin: 20px 0;
     border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .error {
@@ -64,6 +66,7 @@ svg {
     padding: 20px;
     margin: 20px 0;
     border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 #userName {
@@ -81,8 +84,9 @@ svg {
     background: white;
     padding: 8px;
     margin-top: 5px;
-    border: 1px solid #ccc;
+    /* border: 1px solid #ccc; */
     border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 #userDetails p {
@@ -195,9 +199,10 @@ input[type="password"] {
     width: fit-content;
     max-width: 100%;
     font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-#audit_ratio > div:first-child {
+#audit_ratio>div:first-child {
     color: #b58900;
     font-size: x-large;
     padding: 20px;
@@ -208,7 +213,8 @@ input[type="password"] {
     display: flex;
     gap: 10px;
     font-weight: normal;
-@media(max-width: 1200px) {
+
+    @media(max-width: 1200px) {
         width: 100%;
         display: block !important;
         text-align: center;
@@ -231,11 +237,13 @@ input[type="password"] {
     align-items: center;
     justify-content: center;
     font-weight: 600;
+
     @media(max-width: 1200px) {
         margin: 5px auto;
         width: 100% !important;
         /* display: block !important; */
     }
+
     /* Green for Total Up */
 }
 
@@ -248,11 +256,13 @@ input[type="password"] {
     display: flex;
     align-items: center;
     justify-content: center;
+
     @media(max-width: 1200px) {
         width: 100% !important;
         margin: 5px auto;
         /* display: block !important; */
     }
+
     /* Red for Total Down */
 }
 
@@ -305,6 +315,7 @@ select:focus {
     border-radius: 5px;
     font-size: 14px;
     color: #333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 #auditRatio {
@@ -323,6 +334,7 @@ select:focus {
         margin-right: auto;
         width: 100%;
     }
+
     #currentLevel {
         display: block;
         margin: 40px;
@@ -345,6 +357,7 @@ select:focus {
         min-width: 250px;
         flex: 1 1 100%;
         width: 100px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .stat-box-wrapper {
@@ -437,5 +450,6 @@ select:focus {
         color: #333;
         font-weight: bold;
         max-width: 100%;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 }
