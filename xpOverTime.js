@@ -1,5 +1,5 @@
 import { createSvg } from "./utils.js"
-import { formatBytes } from "./utils.js";
+//import { formatBytes } from "./utils.js";
 
 /*______________________________xp over time____________________________*/
 export function createXpOverTimeChart(transactions, cohortInfo, xMonths) {
@@ -34,9 +34,10 @@ export function createXpOverTimeChart(transactions, cohortInfo, xMonths) {
 
     // Create 10 Y-axis labels
     for (let i = 0; i <= 10; i++) {
-        const value = Math.pow(maxY / 10, 1) * i;
+        //const value = Math.pow(maxY / 10, 1) * i;
+        const value = (maxY / 10) * i;
         //const y = 400 - margin.bottom - (value / maxY) * height;
-        const y = 400 - margin.bottom - (Math.sqrt(value) / Math.sqrt(maxY)) * height;
+        const y = 400 - margin.bottom - Math.sqrt(value / maxY) * height;
 
         const yText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         yText.setAttribute('x', margin.left - 10);
@@ -66,7 +67,7 @@ export function createXpOverTimeChart(transactions, cohortInfo, xMonths) {
     document.getElementById('xpOverTime').appendChild(svg);
     // Update function
     function update() {
-        document.getElementById('monthsSelect').removeEventListener('change', update);
+        //document.getElementById('monthsSelect').removeEventListener('change', update);
         // Remove the previous svg element if it exists
         const svgElement = document.getElementById('xpOverTime').querySelector('svg');
         if (svgElement) {
@@ -80,7 +81,9 @@ export function createXpOverTimeChart(transactions, cohortInfo, xMonths) {
     }
 
     // Add event listener to the select element to update the chart
-    document.getElementById('monthsSelect').addEventListener('change', update);
+    //document.getElementById('monthsSelect').addEventListener('change', update);
+    document.getElementById("monthsSelect").onchange = update;
+
 
 }
 
@@ -97,7 +100,7 @@ function getLastXMonthsTransactions(transactions, months) {
     cutoffDate.setMonth(now.getMonth() - months); // Move back X months
 
     return transactions
-        .map(t => ({ ...t, createdAt: new Date(t.createdAt) })) // Ensure Date objects
+        .map(t => ({ ...t, createdAt: new Date(t.createdAt) })) // Ensure a
         .sort((a, b) => a.createdAt - b.createdAt) // Sort by date
         .filter(t => t.createdAt >= cutoffDate); // Keep only recent ones
 }
@@ -116,7 +119,7 @@ function addStartEnd(transactions, cohortInfo) {
 function getDataPoints(transactions, xMonths) {
     // Process and sort transactions
     const processed = getLastXMonthsTransactions(transactions, xMonths)
-    console.log('processed', processed)
+    //console.log('processed', processed)
     // Calculate cumulative XP
     let cumulative = 0;
     const dataPoints = processed.map(t => {
@@ -163,7 +166,7 @@ class Path {
         const height = 400 - margin.top - margin.bottom;
 
 
-        const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        //const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
         // Create line path
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 
@@ -183,18 +186,19 @@ class Path {
             const y = 400 - margin.bottom -
                 Math.sqrt(point.cumulative / maxY) * height;
             pathData += ` H ${x} V ${y}`;
-            if (i === dataPoints.length - 1) {
-                lastX = x;
-                lastY = y;
-                lastValue = point.cumulative;
-            }
+            // if (i === dataPoints.length - 1) {
+            //     lastX = x;
+            //     lastY = y;
+            //     lastValue = point.cumulative;
+            // }
         });
 
         path.setAttribute('d', pathData);
         path.setAttribute('fill', 'none');
         path.setAttribute('stroke', '#4a90e2');
         path.setAttribute('stroke-width', '2');
-        group.appendChild(path)
+        return path
+        //group.appendChild(path)
         // if (lastX !== undefined && lastY !== undefined) {
         //     // Create text element
         //     const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
@@ -207,7 +211,8 @@ class Path {
         //     // Append text to group
         //     group.appendChild(text);
         // }
-        return group
+        //return group
+
     }
     static createDot(x, y, radius = 3, color = '#333') {
         const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
