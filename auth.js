@@ -1,9 +1,7 @@
-import {navigator} from "./utils.js"
+import { navigator } from "./utils.js"
 
 export class authentication {
     static isAuthenticated() {
-        // undefined --> true --> false 
-        // jwt --> false --> true 
         return !!this.getJwt();
     }
     static getJwt() {
@@ -15,6 +13,19 @@ export class authentication {
     }
     static redirectToLogin() {
         navigator('/login')
-        // window.location.href = '/login';
+    }
+
+    static authGaurd(route) {
+        if (!authentication.isAuthenticated()) {
+            if (route != "/login") {
+                navigator('/login');
+                return
+            }
+        } else {
+            if (route == "/login") {
+                navigator('/');
+                return
+            }
+        }
     }
 }

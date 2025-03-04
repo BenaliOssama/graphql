@@ -70,7 +70,6 @@ export class ProfilePage {
 
         document.getElementById('logoutBtn').addEventListener('click', () => {
             navigator('/logout')
-            // window.location.href = '/logout';
         });
 
         // Example query for user data
@@ -125,12 +124,6 @@ export class ProfilePage {
         // window.onload = loadProfile;
         loadProfile();
     }
-
-    unmount() {
-        // Cleanup when navigating away
-        // this.button.removeEventListener('click', this.handleClick);
-        // document.body.removeEventListener('click', this.handleNavigation);
-    }
 }
 
 class Display {
@@ -183,16 +176,14 @@ class Display {
         document.getElementById('totalXp').innerHTML = `
         <span class="large-number">${formatBytes(data.transaction_aggregate.aggregate.sum.amount, 0)}</span>
     `;
-        // Display Last Project details
+        // Dasisplay Lt Project details
         const projects = lastProjectsRes.user[0].transactions;
 
         projects.forEach((project) => {
             // Create a container div for each project
             const p = document.createElement('div');
-
             // Format the creation date to only show year, month, and day
             const formattedDate = new Date(project.createdAt).toLocaleDateString('en-GB'); // Format as DD/MM/YYYY
-
 
             // Set the innerHTML with the formatted content
             p.innerHTML = `
@@ -204,7 +195,6 @@ class Display {
             // Append the project card to the 'lastProjectDetails' container
             document.getElementById('lastProjectDetails').appendChild(p);
         });
-
     }
 
     static displayLevel(data) {
@@ -215,7 +205,7 @@ class Display {
                 <circle cx="75" cy="75" r="60" fill="none" stroke="#ddd" stroke-width="10"/>
                 
                 <!-- Progress Circle -->
-                <circle cx="75" cy="75" r="60" fill="none" stroke="#007BFF" stroke-width="10" stroke-linecap="round"/>
+                <circle cx="75" cy="75" r="60" fill="none" stroke="#007BFF" stroke-width="10"/>
                 
                 <!-- Centered Text -->
                 <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="20" fill="#333">

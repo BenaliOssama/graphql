@@ -8,34 +8,18 @@ export class Router {
 
         // Bind events
         window.addEventListener('popstate', this.handlePopstate.bind(this));
-        window.addEventListener('load', this.handleInitialLoad.bind(this));
+        window.addEventListener('load', this.handleInitialLoad.bind(this)); // whole page has loaded,
     }
 
     addRoute(path, ComponentClass) {
         this.routes[path] = ComponentClass; // Store component class
     }
-    authGaurd(route) {
-        if (!authentication.isAuthenticated()) {
-            if (route != "/login") {
-                navigator('/login');
-                return
-            }
-        } else {
-            if (route == "/login") {
-                navigator('/');
-                return
-            }
-        }
-    }
+
+
     render(route) {
-        this.authGaurd(route)
+        authentication.authGaurd(route)
 
         const app = document.getElementById('app');
-
-        // Unmount current component if it exists
-        if (this.currentComponent && typeof this.currentComponent.unmount === 'function') {
-            this.currentComponent.unmount();
-        }
 
         // Get the component class for the route
         const ComponentClass = this.routes[route];
@@ -59,7 +43,6 @@ export class Router {
     handlePopstate(event) {
         event.preventDefault();
         const currentRoute = window.location.pathname;
-        //navigator(currentRoute)
         this.render(currentRoute);
     }
 

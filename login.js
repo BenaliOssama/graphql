@@ -33,7 +33,6 @@ export class LogInPage {
                 const jwt = await response.json();
                 localStorage.setItem('jwt', jwt);
                 navigator('/')
-                //window.location.href = '/';
             } catch (error) {
                 document.getElementById('errorMessage').textContent = 'Invalid credentials';
             }
