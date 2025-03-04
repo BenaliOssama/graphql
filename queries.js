@@ -31,32 +31,33 @@ export const queries = {
 
   individualXpQuery: function (module) {
     return ` {
-            transaction(where: {
-                type: { _eq: "xp" },
-                eventId: { _eq: ${module}}
-            }, order_by: { createdAt: desc }) {
-                path
-                amount
-                createdAt
-            }
-        }`},
+      transaction(where: {
+          type: { _eq: "xp" },
+          eventId: { _eq: ${module}}
+      }, order_by: { createdAt: desc }) {
+          path
+          amount
+          createdAt
+      }
+    }`
+  },
   currentLevelQuery: `{
-        transaction_aggregate(
-            where:{
-                type: { _eq: "level" }
-                event : {object :{name:{_eq:"Module"}}}
-                }
-            order_by: { createdAt: desc }){aggregate {max {amount}}}
-        }`,
+    transaction_aggregate(
+      where:{
+        type: { _eq: "level" }
+        event : {object :{name:{_eq:"Module"}}}
+      }
+      order_by: { createdAt: desc }){aggregate {max {amount}}}
+  }`,
 
   skillQuery: `{
-            transaction(
-                where: { type: { _like: "skill%" } }
-                order_by: { amount: desc }) {
-                type
-                amount
-            }
-        }`,
+    transaction(
+      where: { type: { _like: "skill%" } }
+      order_by: { amount: desc }) {
+      type
+      amount
+    }
+  }`,
   lastProjectsQuery: function (max) {
     return `{
       user {
