@@ -1,3 +1,8 @@
+//  where: {type: {_eq: "type string"}}
+// order_by: { type : desc, asend ? }) {
+// type : { _nin: [11, 67] }
+// type : { _in: [41, 11] }
+
 export const queries = {
   userQuery: `{
     user{
@@ -32,12 +37,12 @@ export const queries = {
   individualXpQuery: function (module) {
     return ` {
       transaction(where: {
-          type: { _eq: "xp" },
-          eventId: { _eq: ${module}}
+        type: { _eq: "xp" },
+        eventId: { _eq: ${module}}
       }, order_by: { createdAt: desc }) {
-          path
-          amount
-          createdAt
+        path
+        amount
+        createdAt
       }
     }`
   },
