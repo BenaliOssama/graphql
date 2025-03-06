@@ -20,6 +20,7 @@ export function formatBytes(bytes, fix = 1, accurate = false) {
 }
 
 export function navigator(route) {
-    history.replaceState(null, null, route);
-    window.dispatchEvent(new PopStateEvent('popstate'));
+    // null , null, /home
+    history.replaceState(null, null, route); // pushState --> 
+    window.dispatchEvent(new PopStateEvent('popstate')); 
 }
